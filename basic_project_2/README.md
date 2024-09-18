@@ -1,6 +1,6 @@
 # basic_project_2
 
-widgets
+A new Flutter project.
 
 ## Getting Started
 
