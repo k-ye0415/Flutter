@@ -8,42 +8,42 @@ void main() => runApp(
         home: Scaffold(
           // scaffold 는 app 의UI 를 그려주는 도화지같은 것
           appBar: AppBar(
-            actions: [
-              Icon(Icons.home),
-              Icon(Icons.play_arrow),
-            ],
-            centerTitle: true,
-            title: Text("App Bar"),
+            title: Text("Study to Container"),
           ),
-          body: TestWidget(),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.abc),
-            onPressed: (){
-
-            },
-          ),
+          body: CustomContainer(),
         ),
       ),
     );
 
-class TestWidget extends StatelessWidget {
-  const TestWidget({super.key});
-
-  // 상태 값을 유지한 채 변경하고자 할 때에는 hotreload, 상태 값을 유지하지 않아도 될 때에는 hotrestart 를 하는것이 바람직함.
-  // Google -> Material Design
-  // Apple -> Cupertino Design
+class CustomContainer extends StatelessWidget {
+  const CustomContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Text(
-            "Hollo, Flutter",
-            style: TextStyle(color: Colors.black, fontSize: 30.0),
-          ),
-        ),
+    return Container(
+      // container 같은건 android 에서 layout 으로 감싸듯 생각할 수 있을 것 같다.
+      width: 300,
+      //double.infinity, // 좌 우 꽉 채우는 것. match 같은거
+      height: 300,
+      // color: Colors.blue.shade100,
+      // color: Color(0xFFBFFBBB), // 색상 코드 입력 시
+      padding: EdgeInsets.fromLTRB(10, 12, 10, 12),
+      decoration: BoxDecoration(
+        // BoxDecoration 과 container 의 color widget 은 같이 쓸 수 없음.
+        color: Color(0xFFBFFBBB),
+        border:
+            Border.all(color: Colors.green, width: 4, style: BorderStyle.solid),
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              offset: Offset(6, 6),
+              blurRadius: 10,
+              spreadRadius: 10)
+        ],
       ),
+      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      child: Container(child: Center(child: Text("Hello, Constainer"))),
     );
   }
 }
