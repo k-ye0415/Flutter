@@ -6,7 +6,7 @@ void main() => runApp(MaterialApp(
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text("좌우배치하기"),
+          title: Text("상하좌우배치하기"),
         ),
         body: Body(),
       ),
@@ -17,28 +17,89 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      // scrollDirection: Axis.vertical, // scroll 어느 방향으로 할 지
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
+            color: Colors.grey,
             width: 100,
-            height: 80,
-            color: Colors.red[100],
-            child: Text("Container 1"),
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 9),
           ),
           Container(
+            color: Colors.grey,
             width: 100,
-            height: 80,
-            color: Colors.green[100],
-            child: Text("Container 2"),
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
           ),
           Container(
+            color: Colors.grey,
             width: 100,
-            height: 80,
-            color: Colors.blue[100],
-            child: Text("Container 3"), // 일반적으로 child 는 가장 밑에 위치하는것이 좋음.
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
           ),
+          Container(
+            color: Colors.grey,
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
+          ),
+          Container(
+            color: Colors.grey,
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
+          ),
+          Container(
+            color: Colors.grey,
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
+          ),
+          Container(
+            color: Colors.grey,
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
+          ),
+          Container(
+            color: Colors.grey,
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.symmetric(vertical: 8),
+          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Container(
+          //       width: 100,
+          //       height: 80,
+          //       color: Colors.red[100],
+          //       child: Text("Container 1"),
+          //     ),
+          //     Container(
+          //       width: 100,
+          //       height: 80,
+          //       color: Colors.green[100],
+          //       child: Text("Container 2"),
+          //     ),
+          //     Container(
+          //       width: 100,
+          //       height: 80,
+          //       color: Colors.blue[100],
+          //       child: Text("Container 3"), // 일반적으로 child 는 가장 밑에 위치하는것이 좋음.
+          //     ),
+          //   ],
+          // ),
+          // Container(
+          //   width: 300,
+          //   height: 300,
+          //   color: Colors.grey,
+          //   child: Text("Conteiner 4"),
+          // )
         ],
       ),
     );
