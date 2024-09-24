@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Grade extends StatelessWidget {
-  const Grade({super.key});
+class MyCard extends StatelessWidget {
+  const MyCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,9 @@ class Grade extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start, // 정렬
+//           mainAxisAlignment: MainAxisAlignment.center, // 세로 기준 어디에 위치할지
           children: [
-            Center(
+            Center( // 이 놈은 가로 기준으로 가운데에 위치하게끔만 함.
               child: CircleAvatar(
                 backgroundImage: AssetImage("assets/test_image.jpg"),
                 radius: 60.0,
@@ -124,7 +125,6 @@ class Grade extends StatelessWidget {
             SvgPicture.asset("assets/ic_check_off.svg"),
           ],
         ),
-      ),
     );
   }
 }
