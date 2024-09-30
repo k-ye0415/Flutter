@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:part_7_project_2/main.dart';
 
 class NewPage extends StatelessWidget {
   const NewPage({super.key});
@@ -16,15 +18,17 @@ class NewPage extends StatelessWidget {
             TextButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) 맨처음 보낼 때
-                  Navigator.pop(context); // 단순히 해당 View 없앨 때
+                  // Navigator.pop(context); // 단순히 해당 View 없앨 때
+                  context.pop();
                 },
                 child: Text("Go to Main")),
             TextButton(
                 onPressed: () {
                   // Navigator.push(context, MaterialPageRoute(builder: (context)
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return NewPage2();
-                  }));
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   return NewPage2();
+                  // }));
+                  context.pushNamed("new1");
                 },
                 child: Text("Go to NewPage2")),
           ],
@@ -54,7 +58,8 @@ class NewPage2 extends StatelessWidget {
                 child: Text("Go to back")),
             TextButton(
                 onPressed: () {
-                  Navigator.popUntil(context, (route) => route.isFirst); // 맨처음 View로 보낼 때
+                  // Navigator.popUntil(context, (route) => route.isFirst); // 맨처음 View로 보낼 때
+                  context.goNamed("home");
                 },
                 child: Text("Go to Main"))
           ],
