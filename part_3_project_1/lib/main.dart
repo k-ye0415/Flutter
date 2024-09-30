@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 
 void main() => runApp(MaterialApp(
-      theme: ThemeData(
-        useMaterial3: false,
+      theme: ThemeData( // theme 는 전역변수로 따로 빼서 사용하는 것이 좋음.
+          useMaterial3: false,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+          textTheme: TextTheme(
+            bodyMedium: TextStyle(fontWeight: FontWeight.normal, fontSize: 30)
+          )
+          // ColorScheme.fromSeed(seedColor: Colors.indigo) // primary 색상을 지정해주면 어울리는 색을 자동으로 지정해주는 것.
+
+        //   ColorScheme.light(
+        //     primary: Colors.indigo,
+        //     secondary: Colors.green,
+        //     tertiary: Colors.amber
+        //   ),
+        // appBarTheme: AppBarTheme(
+        //   backgroundColor: Colors.grey
+        // )
       ),
       home: Home(),
     ));
