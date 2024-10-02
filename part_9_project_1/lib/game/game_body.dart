@@ -31,11 +31,15 @@ class _GameBodyState extends State<GameBody> {
     return Column(
       children: [
         Expanded(
-          child: CpuInput(isDone: isDone, cpuInput: _cpuInput),
+          child: CpuInput(isDone: isDone, cpuInput: _cpuInput), // 생성자로 값 전달
         ),
         Expanded(
-            child: GameResult(
-                isDone: isDone, callback: reset, result: getResult())),
+          child: GameResult(
+            isDone: isDone,
+            callback: reset, // callback 은 '()' 가 붙지 않음.
+            result: getResult(),
+          ),
+        ),
         Expanded(
             child: UserInput(
           isDone: isDone,
@@ -92,7 +96,7 @@ class _GameBodyState extends State<GameBody> {
     }
   }
 
-  void reset(){
+  void reset() {
     setState(() {
       isDone = false;
       setCpuInput();

@@ -3,7 +3,7 @@ import 'package:part_9_project_1/game/enum.dart';
 
 class GameResult extends StatelessWidget {
   final bool isDone;
-  final Result? result;
+  final Result? result; // nullable 로 받게 된다면 생성자에 'required' 키워드가 붙지 않음.
   final VoidCallback callback;
 
   const GameResult(
@@ -24,7 +24,9 @@ class GameResult extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          TextButton(onPressed: () => callback.call(), child: Text("다시하기"))
+          TextButton(
+              onPressed: () => callback.call(), // callback 호출
+              child: Text("다시하기"))
         ],
       );
     }
