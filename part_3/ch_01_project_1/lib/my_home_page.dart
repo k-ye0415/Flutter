@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shake/shake.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import 'make_box.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -26,8 +29,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    WidgetsBinding.instance
-        .addObserver(this); // 여기서 this 는 obaserve 하겟다고 선언한 위젯 그 자체
+    WidgetsBinding.instance.addObserver(this); // 여기서 this 는 obaserve 하겟다고 선언한 위젯 그 자체
     detector = ShakeDetector.autoStart(
       onPhoneShake: () {
         setState(() {
@@ -110,9 +112,36 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              '쉐킷쉐킷~!',
+            const MakeBox().box.padding(const EdgeInsets.all(30)).color(Colors.brown).make(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // velocity_x 패키지를 사용해서 기본적으로 사용하던 container 를 한줄로 변경할 수 있다.
+                const MakeBox(),
+                // Container(
+                //   color: Colors.amber,
+                //   width: 20,
+                //   height: 20,
+                // ),
+                '쉐킷쉐킷~!'
+                    .text
+                    .color(Colors.blue)
+                    .bold
+                    .white // 뒤에 선언 된 것이 덮어씌기함.
+                    .size(30)
+                    .isIntrinsic
+                    .makeCentered() // 일반 make 는 만들기만 하고, 만들면서 center 위치하고 싶을 때 해당 메소드 사용
+                    // .make() // 여기까지가 text 의 builder
+                    .box // text 를 감싸는 box 를 새로 선언
+                    .withRounded(value: 50)
+                    .color(Colors.green)
+                    .height(150)
+                    .make()
+                    .pSymmetric(v: 20, h: 20),
+                const MakeBox(),
+              ],
             ),
+            const MakeBox(),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.displayLarge,
