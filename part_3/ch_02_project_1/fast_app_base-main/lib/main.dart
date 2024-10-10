@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'app.dart';
 import 'common/data/preference/app_preferences.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: binding);
   await EasyLocalization.ensureInitialized();
   await AppPreferences.init();
+  timeago.setLocaleMessages('ko', timeago.KoMessages());
 
   runApp(EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ko')],
