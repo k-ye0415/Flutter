@@ -4,6 +4,8 @@ import 'package:fast_app_base/common/widget/w_rounded_container.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../common/widget/w_long_button.dart';
+import '../stock_dummy.dart';
+import '../w_interest_stock.dart';
 
 class MyStockFragment extends StatelessWidget {
   const MyStockFragment({super.key});
@@ -60,44 +62,49 @@ class MyStockFragment extends StatelessWidget {
         ),
       );
 
-  Widget getMyStock(BuildContext context) => Container(
-        color: context.appColors.roundedLayoutBackground,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              height30,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                /// 이렇게 써도 되고~
+  Widget getMyStock(BuildContext context) => Column(
+        children: [
+          Container(
+            color: context.appColors.roundedLayoutBackground,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
                 children: [
-                  "관심 주식".text.bold.size(20).make(),
-                  // emptyExpanded, /// 만들어놓은거 사용해도되고,
-                  "편집하기".text.color(context.appColors.lessImportant).make(),
-                ],
-              ),
-              height20,
-              Tap(
-                onTap: (){
-                  context.showSnackbar("message");
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
+                  height30,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                    /// 이렇게 써도 되고~
                     children: [
-                      "기본".text.make(),
-                      emptyExpanded,
-                      Arrow(
-                        direction: AxisDirection.up,
-                        color: context.appColors.lessImportant,
-                      )
+                      "관심 주식".text.bold.size(20).make(),
+                      // emptyExpanded, /// 만들어놓은거 사용해도되고,
+                      "편집하기".text.color(context.appColors.lessImportant).make(),
                     ],
                   ),
-                ),
-              )
-            ],
+                  height20,
+                  Tap(
+                    onTap: () {
+                      context.showSnackbar("message");
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        children: [
+                          "기본".text.make(),
+                          emptyExpanded,
+                          Arrow(
+                            direction: AxisDirection.up,
+                            color: context.appColors.lessImportant,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+          const InterestStockList().pSymmetric(h: 20),
+        ],
       );
 }
