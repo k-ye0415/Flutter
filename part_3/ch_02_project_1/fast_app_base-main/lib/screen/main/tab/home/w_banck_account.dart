@@ -5,6 +5,8 @@ import 'package:fast_app_base/screen/main/tab/home/vo/vo_bank_account.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+final _formatter = NumberFormat("###,###,###");
+
 class BankAccountWidget extends StatelessWidget {
   final BankAccount account;
 
@@ -12,7 +14,6 @@ class BankAccountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formatter = NumberFormat("###,###,###");
     return Row(
       children: [
         Image.asset(
