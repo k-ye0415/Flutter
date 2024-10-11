@@ -5,6 +5,7 @@ import 'package:fast_app_base/common/data/preference/app_preferences.dart';
 import 'package:fast_app_base/common/widget/w_big_button.dart';
 import 'package:fast_app_base/screen/main/tab/stock/settings/d_number.dart';
 import 'package:fast_app_base/screen/main/tab/stock/settings/w_switch_menu.dart';
+import 'package:fast_app_base/screen/opensource/s_opensource.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../common/data/preference/prefs.dart';
@@ -72,6 +73,9 @@ class _SettingScreenState extends State<SettingScreen> {
               },
             ),
           ),
+          BigButton("오픈소스 화면", onTap: () async {
+            Nav.push(OpensourceScreen());
+          })
         ],
       ),
     );
