@@ -1,4 +1,5 @@
 import 'package:fast_app_base/common/common.dart';
+import 'package:fast_app_base/screen/main/tab/stock/settings/s_settings.dart';
 import 'package:fast_app_base/screen/main/tab/stock/tab/f_my_stock.dart';
 import 'package:fast_app_base/screen/main/tab/stock/tab/f_todys_discovery.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _StockFragmentState extends State<StockFragment> with SingleTickerProvider
               ImageButton(
                 imagePath: "$basePath/icon/stock_settings.png",
                 onTap: () {
-                  context.showSnackbar("Settings Click!");
+                  Nav.push(SettingScreen());
                 },
               ),
             ],
