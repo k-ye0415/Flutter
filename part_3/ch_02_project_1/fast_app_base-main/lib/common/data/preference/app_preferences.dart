@@ -13,7 +13,7 @@ class AppPreferences {
   static late final SharedPreferences _prefs;
 
   static String getPrefKey(PreferenceItem item) {
-    return '${AppPreferences.prefix}${item.key}';
+    return '${AppPreferences.prefix}${item.key}' ;
   }
 
   static Future<void> init() async {

@@ -24,7 +24,7 @@ class _OpensourceScreenState extends State<OpensourceScreen> {
   }
 
   void initData() async {
-    final list = await LocalJson.getObjectList<Package>("json/licenses.json");
+    final list = await LocalJson.getObjectList<Package>("/json/licenses.json");
     setState(() {
       packageList = list;
     });
@@ -36,7 +36,7 @@ class _OpensourceScreenState extends State<OpensourceScreen> {
       appBar: AppBar(
         title: 'opensource'.tr().text.make(),
       ),
-      body: ListView.separated(
+      body: ListView.separated( /// divider 를 해주는 builder
         itemBuilder: (context, index) => OpensourceItem(packageList[index]),
         itemCount: packageList.length,
         separatorBuilder: (BuildContext context, int index) {

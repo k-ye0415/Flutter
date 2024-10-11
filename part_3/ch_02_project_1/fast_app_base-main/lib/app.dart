@@ -2,8 +2,10 @@ import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/theme/custom_theme_app.dart';
 import 'package:fast_app_base/screen/main/s_main.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboard_utils_fork/keyboard_utils.dart';
 
 import 'common/theme/custom_theme.dart';
+import 'common/util/app_keyboard_util.dart';
 
 class App extends StatefulWidget {
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
@@ -18,7 +20,7 @@ class App extends StatefulWidget {
   State<App> createState() => AppState();
 }
 
-class AppState extends State<App> with Nav, WidgetsBindingObserver {
+class AppState extends State<App> with Nav, WidgetsBindingObserver, KeyboardDetector {
   @override
   GlobalKey<NavigatorState> get navigatorKey => App.navigatorKey;
 
@@ -61,6 +63,9 @@ class AppState extends State<App> with Nav, WidgetsBindingObserver {
         break;
       case AppLifecycleState.paused:
         App.isForeground = false;
+        if (isKeyboardOn) { /// 그냥 내가 불편해서 추가
+          AppKeyboardUtil.hide(context);
+        }
         break;
       case AppLifecycleState.detached:
         break;
