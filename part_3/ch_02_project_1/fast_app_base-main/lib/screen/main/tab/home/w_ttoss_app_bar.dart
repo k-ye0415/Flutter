@@ -13,6 +13,7 @@ class TtossAppBar extends StatefulWidget {
 
 class _TtossAppBarState extends State<TtossAppBar> {
   bool _showRedDot = false;
+  int _tappingCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,14 +23,37 @@ class _TtossAppBarState extends State<TtossAppBar> {
       child: Row(
         children: [
           width10,
-          Image.asset(
-            "$basePath/icon/toss.png",
-            height: 30,
+          AnimatedContainer(
+            duration: 1000.ms,
+            height: _tappingCount > 2 ? 60 : 30,
+
+            /// ㅅㅣ작점과 끝점이 필요!
+            child: Image.asset(
+              "$basePath/icon/toss.png",
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: Image.asset(
+              "$basePath/icon/toss.png",
+            ),
+            secondChild: Image.asset(
+              "$basePath/icon/map_point.png",
+              height: 30,
+            ),
+            crossFadeState: _tappingCount < 2?CrossFadeState.showFirst:CrossFadeState.showSecond,
+            duration: 1500.ms,
           ),
           emptyExpanded,
-          Image.asset(
-            "$basePath/icon/map_point.png",
-            height: 30,
+          Tap(
+            onTap: () {
+              setState(() {
+                _tappingCount++;
+              });
+            },
+            child: Image.asset(
+              "$basePath/icon/map_point.png",
+              height: 30,
+            ),
           ),
           width10,
           Tap(
@@ -57,7 +81,11 @@ class _TtossAppBarState extends State<TtossAppBar> {
                     ),
                   )
               ],
-            ).animate(/*onPlay: (controller) => controller.repeat()*/).shake(duration: 2000.ms,hz: 3).then().fadeOut(duration: 1000.ms),
+            )
+                .animate(/*onPlay: (controller) => controller.repeat()*/)
+                .shake(duration: 2000.ms, hz: 3)
+                .then()
+                .fadeOut(duration: 1000.ms),
           ),
           width10,
         ],
