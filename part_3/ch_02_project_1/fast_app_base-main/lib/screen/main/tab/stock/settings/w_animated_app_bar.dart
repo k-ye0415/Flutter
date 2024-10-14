@@ -61,7 +61,29 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
                   style: TextStyle(fontSize: getValue(30, 15)),
                   duration: duration,
                   child: widget.title.text.white.make()),
-            )
+            ),
+            Positioned.fill(
+              child: Align(
+                  alignment: Alignment.topRight,
+                  child: TweenAnimationBuilder(
+                    tween: ColorTween(
+                      begin: Colors.green,
+                      end: isTriggered ? Colors.orange : Colors.green,
+                    ),
+                    duration: 1000.ms,
+                    builder: (context, value, child) => ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        value ?? Colors.green,
+                        BlendMode.modulate, /// color 필터링
+                      ),
+                      child: child,
+                    ),
+                    child: Image.asset(
+                      "$basePath/icon/map_point.png",
+                      height: 30,
+                    ),
+                  )),
+            ),
           ],
         ),
       ),
