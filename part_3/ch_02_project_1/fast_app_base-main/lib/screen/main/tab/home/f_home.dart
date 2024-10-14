@@ -14,6 +14,7 @@ import 'package:live_background/widget/live_background_widget.dart';
 import '../../../../common/widget/w_big_button.dart';
 import '../../../dialog/d_color_bottom.dart';
 import '../../../dialog/d_confirm.dart';
+import 's_number.dart';
 
 class HomeFragment extends StatelessWidget {
   const HomeFragment({
@@ -47,8 +48,11 @@ class HomeFragment extends StatelessWidget {
                 children: [
                   BigButton(
                     "토스뱅크",
-                    onTap: () {
-                      context.showSnackbar("message");
+                    onTap: () async {
+                       print("start");
+                       final result = await Nav.push(NumberScreen());
+                       print(result);
+                       print("end");
                     },
                   ),
                   height10,
