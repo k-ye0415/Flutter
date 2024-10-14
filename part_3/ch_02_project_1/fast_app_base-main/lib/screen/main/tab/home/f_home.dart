@@ -1,3 +1,4 @@
+import 'package:fast_app_base/class/advanced/stream_test.dart';
 import 'package:fast_app_base/common/cli_common.dart';
 import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/widget/w_rounded_container.dart';
@@ -16,10 +17,17 @@ import '../../../dialog/d_color_bottom.dart';
 import '../../../dialog/d_confirm.dart';
 import 's_number.dart';
 
-class HomeFragment extends StatelessWidget {
+class HomeFragment extends StatefulWidget {
   const HomeFragment({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<HomeFragment> createState() => _HomeFragmentState();
+}
+
+class _HomeFragmentState extends State<HomeFragment> {
+  late final stream = countStream(5).asBroadcastStream();
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +54,43 @@ class HomeFragment extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  StreamBuilder(
+                    stream: stream,
+                    builder: (context, snapshot) {
+                      final count = snapshot.data;
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.active:
+                          return count!.text.bold.white.size(30).make();
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return CircularProgressIndicator();
+                        case ConnectionState.done:
+                          return "완료".text.bold.white.size(30).make();
+                      }
+                    },
+                  ),
+                  StreamBuilder(
+                    stream: stream,
+                    builder: (context, snapshot) {
+                      final count = snapshot.data;
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.active:
+                          return count!.text.bold.white.size(30).make();
+                        case ConnectionState.waiting:
+                        case ConnectionState.none:
+                          return CircularProgressIndicator();
+                        case ConnectionState.done:
+                          return "완료".text.bold.white.size(30).make();
+                      }
+                    },
+                  ),
                   BigButton(
                     "토스뱅크",
                     onTap: () async {
-                       print("start");
-                       final result = await Nav.push(NumberScreen());
-                       print(result);
-                       print("end");
+                      print("start");
+                      final result = await Nav.push(NumberScreen());
+                      print(result);
+                      print("end");
                     },
                   ),
                   height10,
@@ -73,5 +111,13 @@ class HomeFragment extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Stream<int> countStream(int max) async* {
+    await sleepAsync(2.seconds);
+    for (int i = 1; i <= max; i++) {
+      yield i;
+      await sleepAsync(1.seconds);
+    }
   }
 }
