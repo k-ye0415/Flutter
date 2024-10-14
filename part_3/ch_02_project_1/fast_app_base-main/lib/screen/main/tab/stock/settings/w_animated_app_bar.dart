@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 
 class AnimatedAppBar extends StatefulWidget {
   final String title;
-  final ScrollController controller;
+  final ScrollController scrollController;
+  final AnimationController animationController;
 
-  const AnimatedAppBar(this.title, {super.key, required this.controller});
+  const AnimatedAppBar(
+    this.title, {
+    super.key,
+    required this.scrollController,
+    required this.animationController,
+  });
 
   @override
   State<AnimatedAppBar> createState() => _AnimatedAppBarState();
@@ -17,11 +23,18 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
   Duration get duration => 10.ms;
   double scrollPosition = 0;
 
+  // late Animation animation = ColorTween(begin: Colors.blue, end: Colors.red).animate(controller);
+  late CurvedAnimation animation =
+      CurvedAnimation(parent: widget.animationController, curve: Curves.bounceInOut);
+
   @override
   void initState() {
-    widget.controller.addListener(() {
+    widget.animationController.addListener(() {
+      setState(() {});
+    });
+    widget.scrollController.addListener(() {
       setState(() {
-        scrollPosition = widget.controller.position.pixels;
+        scrollPosition = widget.scrollController.position.pixels;
       });
     });
     super.initState();
@@ -62,28 +75,28 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
                   duration: duration,
                   child: widget.title.text.white.make()),
             ),
-            Positioned.fill(
-              child: Align(
-                  alignment: Alignment.topRight,
-                  child: TweenAnimationBuilder(
-                    tween: ColorTween(
-                      begin: Colors.green,
-                      end: isTriggered ? Colors.orange : Colors.green,
+            Positioned(
+                left: animation.value * 200,
+                child: TweenAnimationBuilder(
+                  tween: ColorTween(
+                    begin: Colors.green,
+                    end: isTriggered ? Colors.orange : Colors.green,
+                  ),
+                  duration: 1000.ms,
+                  builder: (context, value, child) => ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      value ?? Colors.green,
+                      BlendMode.modulate,
+
+                      /// color 필터링
                     ),
-                    duration: 1000.ms,
-                    builder: (context, value, child) => ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        value ?? Colors.green,
-                        BlendMode.modulate, /// color 필터링
-                      ),
-                      child: child,
-                    ),
-                    child: Image.asset(
-                      "$basePath/icon/map_point.png",
-                      height: 30,
-                    ),
-                  )),
-            ),
+                    child: child,
+                  ),
+                  child: Image.asset(
+                    "$basePath/icon/map_point.png",
+                    height: 30,
+                  ),
+                )),
           ],
         ),
       ),
