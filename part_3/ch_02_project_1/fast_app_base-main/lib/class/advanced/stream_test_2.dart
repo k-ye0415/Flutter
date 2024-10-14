@@ -2,7 +2,7 @@ import 'package:fast_app_base/common/common.dart';
 
 import '../../common/util/async/cli_async.dart';
 
-void main() {
+Future<void> main() async {
   /// List 와 Iterable
   final List list = ["blue", "yellow", "red"];
   final iterator = list.iterator;

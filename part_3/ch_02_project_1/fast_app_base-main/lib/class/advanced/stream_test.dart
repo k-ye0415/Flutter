@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fast_app_base/app.dart';
 import 'package:fast_app_base/class/advanced/future_test.dart';
 import 'package:fast_app_base/common/common.dart';
@@ -37,7 +39,7 @@ void main() {
 Stream<int> countStream(int max) async* {
   for (int i = 1; i <= max; i++) {
     // await sleepAsync(1.seconds);
-    sleep(duration)
+    // sleep(duration)
     yield i;
   }
 }
