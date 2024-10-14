@@ -37,6 +37,7 @@ void main() {
 Stream<int> countStream(int max) async* {
   for (int i = 1; i <= max; i++) {
     // await sleepAsync(1.seconds);
+    sleep(duration)
     yield i;
   }
 }
