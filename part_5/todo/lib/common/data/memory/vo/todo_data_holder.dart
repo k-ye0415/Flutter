@@ -11,7 +11,6 @@ class TodoDataHolder extends GetxController {
   final RxList<Todo> todoList = <Todo>[].obs;
 
   void changeTodoStatus(Todo todo) async {
-    debugPrint("todo : ${todo.status}");
     switch (todo.status) {
       case TodoStatus.incomplete:
         todo.status = TodoStatus.ongoing;
@@ -76,7 +75,6 @@ mixin class TodoDataProvider {
 //   }
 //
 //   void changeTodoStatus(Todo todo) async {
-//     debugPrint("todo : ${todo.status}");
 //     switch (todo.status) {
 //       case TodoStatus.incomplete:
 //         todo.status = TodoStatus.ongoing;

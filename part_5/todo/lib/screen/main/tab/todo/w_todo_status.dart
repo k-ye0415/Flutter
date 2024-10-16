@@ -16,7 +16,6 @@ class TodoStatusWidget extends StatelessWidget with TodoDataProvider {
   Widget build(BuildContext context) {
     return Tap(
       onTap: () {
-        debugPrint("tap :::: ${todo.status}");
         todoData.changeTodoStatus(todo);
       },
       child: SizedBox(
