@@ -7,17 +7,16 @@ import 'package:flutter/material.dart';
 
 import '../../../../common/widget/w_fire.dart';
 
-class TodoStatusWidget extends StatelessWidget {
+class TodoStatusWidget extends StatelessWidget with TodoDataProvider {
   final Todo todo;
 
-  const TodoStatusWidget(this.todo, {super.key});
+  TodoStatusWidget(this.todo, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Tap(
       onTap: () {
-        debugPrint("tap :::: ${todo.status}");
-        context.holder.changeTodoStatus(todo);
+        todoData.changeTodoStatus(todo);
       },
       child: SizedBox(
         height: 50,
