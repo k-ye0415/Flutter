@@ -1,15 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LocalLifeFragment extends StatefulWidget {
+import '../../fab/w_floating_daangn_button.riverpod.dart';
+
+class LocalLifeFragment extends ConsumerStatefulWidget {
   const LocalLifeFragment({super.key});
 
   @override
-  State<LocalLifeFragment> createState() => _LocalLifeFragmentState();
+  ConsumerState<LocalLifeFragment> createState() => _LocalLifeFragmentState();
 }
 
-class _LocalLifeFragmentState extends State<LocalLifeFragment> {
+class _LocalLifeFragmentState extends ConsumerState<LocalLifeFragment> {
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    scrollController.addListener(() {
+      final floatingState = ref.read(floatingButtonStateProvider);
+      if (scrollController.position.pixels > 100 && !floatingState.isSmall) {
+        ref.read(floatingButtonStateProvider.notifier).changeButtonSize(true);
+      } else if (scrollController.position.pixels < 100 && floatingState.isSmall) {
+        ref.read(floatingButtonStateProvider.notifier).changeButtonSize(false);
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ListView(
+      controller: scrollController,
+      children: [
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.red[100],
+        ),
+        Container(
+          height: 399,
+          color: Colors.green[100],
+        ),
+      ],
+    );
   }
 }

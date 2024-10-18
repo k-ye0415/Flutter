@@ -33,33 +33,33 @@ class _HomeFragmentState extends ConsumerState<HomeFragment> {
       children: [
         Container(
           height: 399,
-          color: Colors.amber,
+          color: Colors.amber[100],
         ),
         Container(
           height: 399,
-          color: Colors.green,
+          color: Colors.green[100],
         ),
         Container(
           height: 399,
-          color: Colors.amber,
+          color: Colors.amber[100],
         ),Container(
           height: 399,
           color: Colors.green,
         ),Container(
           height: 399,
-          color: Colors.amber,
+          color: Colors.amber[100],
         ),
         Container(
           height: 399,
-          color: Colors.green,
+          color: Colors.green[100],
         ),
         Container(
           height: 399,
-          color: Colors.amber,
+          color: Colors.amber[100],
         ),
         Container(
           height: 399,
-          color: Colors.green,
+          color: Colors.green[100],
         ),
 
 
