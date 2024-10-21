@@ -7,10 +7,13 @@ import 'package:fast_app_base/screen/main/s_main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../tab/tab_item.dart';
+
 class FloatingDaangnButton extends ConsumerWidget {
   FloatingDaangnButton({super.key});
 
   final duration = 300.ms;
+  static const height = 120.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,7 +59,15 @@ class FloatingDaangnButton extends ConsumerWidget {
               ),
               Tap(
                 onTap: () {
-                  ref.read(floatingButtonStateProvider.notifier).onTapButton();
+                  // final currentTab = ref.read(currentTabProvider);
+                  // switch (currentTab) {
+                  //   case TabItem.home:
+                  //   case TabItem.localLife:
+                  //   case TabItem.nearMe:
+                  //   case TabItem.chat:
+                  //   case TabItem.my:
+                  // }
+                  ref.read(floatingButtonStateProvider.notifier).toggleMenu();
                 },
                 child: AnimatedContainer(
                   duration: duration,
@@ -83,12 +94,12 @@ class FloatingDaangnButton extends ConsumerWidget {
                       )
                     ],
                   ),
-                ).pOnly(
-                    bottom: MainScreenState.bottomNavigationBarBorderRadius +
-                        context.viewPaddingBottom +
-                        40,
-                    right: 20),
-              ),
+                ),
+              ).pOnly(
+                  bottom: MainScreenState.bottomNavigationBarBorderRadius +
+                      context.viewPaddingBottom +
+                      40,
+                  right: 20),
             ],
           ),
         )
