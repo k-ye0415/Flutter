@@ -74,6 +74,7 @@ dependencies:
   json_annotation: ^4.8.0
   flutter_riverpod: ^2.5.3
   freezed: ^2.5.2
+  timeago: ^3.7.0
 
 dev_dependencies:
   flutter_test:
