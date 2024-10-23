@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fast_app_base/common/cli_common.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
@@ -105,7 +107,7 @@ class MainScreenState extends ConsumerState<MainScreen> with SingleTickerProvide
 
   Widget _buildBottomNavigationBar(BuildContext context) {
     return Container(
-      height: bottomNavigationBarHeight,
+      height: Platform.isIOS ?bottomNavigationBarHeight + 40 : bottomNavigationBarHeight,
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(color: Colors.black26, spreadRadius: 0, blurRadius: 10),
