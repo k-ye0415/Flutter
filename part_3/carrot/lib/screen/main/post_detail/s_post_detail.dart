@@ -25,7 +25,7 @@ class PostDetailScreen extends ConsumerWidget {
     final productPost = ref.watch(productPostProvider(id));
     return productPost.when(
         data: (data) => _PostDetail(
-              data.simpleProductPost,
+              simpleProductPost ?? data.simpleProductPost,
               productPost: data,
             ),
         error: (error, trace) => "에러발생".text.make(),
@@ -88,18 +88,19 @@ class _PostDetail extends HookWidget {
                 .map((url) => CachedNetworkImage(imageUrl: url, fit: BoxFit.fill))
                 .toList(),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SmoothPageIndicator(
-                controller: pageController, // PageController
-                count: simpleProductPost.product.images.length,
-                effect: ExpandingDotsEffect(
-                  // verticalOffset: 3,
-                  dotColor: Colors.white54,
-                  activeDotColor: Colors.black45,
-                ), // your preferred effect
-                onDotClicked: (index) {}),
-          )
+          if (simpleProductPost.product.images.length > 1)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SmoothPageIndicator(
+                  controller: pageController, // PageController
+                  count: simpleProductPost.product.images.length,
+                  effect: ExpandingDotsEffect(
+                    // verticalOffset: 3,
+                    dotColor: Colors.white54,
+                    activeDotColor: Colors.black45,
+                  ), // your preferred effect
+                  onDotClicked: (index) {}),
+            )
         ],
       ),
     );
