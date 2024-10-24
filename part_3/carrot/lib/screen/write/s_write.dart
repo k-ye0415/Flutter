@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:fast_app_base/app.dart';
 import 'package:fast_app_base/common/common.dart';
 import 'package:fast_app_base/common/util/app_keyboard_util.dart';
@@ -9,8 +12,10 @@ import 'package:fast_app_base/entity/product/product_status.dart';
 import 'package:fast_app_base/entity/product/vo_product.dart';
 import 'package:fast_app_base/screen/main/post_detail/s_post_detail.dart';
 import 'package:fast_app_base/screen/main/tab/home/provider/post_provider.dart';
+import 'package:fast_app_base/screen/write/d_select_image_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../entity/user/vo_address.dart';
 
@@ -22,7 +27,7 @@ class WriteScreen extends ConsumerStatefulWidget {
 }
 
 class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector {
-  final List<String> imageList = [picSum(22)];
+  final List<String> imageList = [];
   final titleController = TextEditingController();
   final priceController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -66,7 +71,24 @@ class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector
           children: [
             _ImageSelectedWidget(
               imageList,
-              onTap: () {},
+              onTapDeletedImage: (imagePath) {
+                setState(() {
+                  imageList.remove(imagePath);
+                });
+              },
+              onTap: () async {
+                final selectedSource = await SelectImageSourceDialog().show();
+                if (selectedSource == null) {
+                  return;
+                }
+                final file = await ImagePicker().pickImage(source: selectedSource);
+                if (file == null) {
+                  return;
+                }
+                setState(() {
+                  imageList.add(file.path);
+                });
+              },
             ),
             _TitleEditor(titleController),
             height30,
@@ -130,8 +152,14 @@ class _WriteScreenState extends ConsumerState<WriteScreen> with KeyboardDetector
 class _ImageSelectedWidget extends StatelessWidget {
   final List<String> imageList;
   final VoidCallback onTap;
+  final void Function(String path) onTapDeletedImage;
 
-  _ImageSelectedWidget(this.imageList, {super.key, required this.onTap});
+  _ImageSelectedWidget(
+    this.imageList, {
+    super.key,
+    required this.onTap,
+    required this.onTapDeletedImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -142,24 +170,136 @@ class _ImageSelectedWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            SizedBox(
-              width: 80,
-              height: 80,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            SelectImageButton(onTap: onTap, imageList: imageList).pOnly(right: 8, top: 10),
+            ...imageList.map(
+              (e) => Stack(
                 children: [
-                  Icon(Icons.camera_alt),
-                  RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: imageList.length.toString(), style: TextStyle(color: Colors.orange)),
-                    TextSpan(text: "/10"),
-                  ]))
+                  SizedBox(
+                    width: 80,
+                    height: 80,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Image.file(
+                        File(e),
+                        fit: BoxFit.fill,
+                      ).box.rounded.border(color: Colors.grey).make(),
+                    ),
+                  ).pOnly(left: 4, right: 10, top: 10),
+                  Tap(
+                    onTap: () {
+                      onTapDeletedImage(e);
+                    },
+                    child: Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: Transform.rotate(
+                          angle: pi / 4,
+                          child: Icon(Icons.add_circle),
+                        ).pOnly(left: 30, bottom: 30),
+                      ),
+                    ),
+                  )
                 ],
-              ).box.rounded.border(color: Colors.grey).make(),
+              ),
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+// class _ImageSelectedWidget extends StatefulWidget {
+//   final List<String> imageList;
+//   final VoidCallback onTap;
+//
+//   _ImageSelectedWidget(this.imageList, {super.key, required this.onTap});
+//
+//   @override
+//   State<_ImageSelectedWidget> createState() => _ImageSelectedWidgetState();
+// }
+//
+// class _ImageSelectedWidgetState extends State<_ImageSelectedWidget> {
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     return SizedBox(
+//       height: 100,
+//       child: SingleChildScrollView(
+//         scrollDirection: Axis.horizontal,
+//         child: Row(
+//           children: [
+//             SelectImageButton(onTap: widget.onTap, imageList: widget.imageList)
+//                 .pOnly(right: 8, top: 10),
+//             ...widget.imageList.map(
+//                   (e) => Stack(
+//                 children: [
+//                   SizedBox(
+//                     width: 80,
+//                     height: 80,
+//                     child: ClipRRect(
+//                       borderRadius: BorderRadius.circular(15),
+//                       child: Image.file(
+//                         File(e),
+//                         fit: BoxFit.fill,
+//                       ).box.rounded.border(color: Colors.grey).make(),
+//                     ),
+//                   ).pOnly(left: 4, right: 10, top: 10),
+//                   Tap(
+//                     onTap: () {
+//                       // 이미지 삭제
+//                       setState(() {
+//                         widget.imageList.remove(e);
+//                       });
+//                     },
+//                     child: Positioned.fill(
+//                       child: Align(
+//                         alignment: Alignment.topRight,
+//                         child: Transform.rotate(
+//                           angle: pi / 4,
+//                           child: Icon(Icons.add_circle),
+//                         ).pOnly(left: 30, bottom: 30),
+//                       ),
+//                     ),
+//                   )
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class SelectImageButton extends StatelessWidget {
+  const SelectImageButton({
+    super.key,
+    required this.onTap,
+    required this.imageList,
+  });
+
+  final VoidCallback onTap;
+  final List<String> imageList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tap(
+      onTap: onTap,
+      child: SizedBox(
+        width: 80,
+        height: 80,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.camera_alt),
+            RichText(
+                text: TextSpan(children: [
+              TextSpan(text: imageList.length.toString(), style: TextStyle(color: Colors.orange)),
+              TextSpan(text: "/10"),
+            ]))
+          ],
+        ).box.rounded.border(color: Colors.grey).make(),
       ),
     );
   }
