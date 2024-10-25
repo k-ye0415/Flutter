@@ -156,15 +156,3 @@ final normalGroup7 = Group(
     GroupMember("user6", Presence.online),
   ],
 );
-
-final groupList = [
-  emergencyGroup,
-  homeGroup,
-  normalGroup1,
-  normalGroup2,
-  normalGroup3,
-  normalGroup4,
-  normalGroup5,
-  normalGroup6,
-  normalGroup7,
-];
