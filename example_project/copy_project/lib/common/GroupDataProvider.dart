@@ -1,9 +1,9 @@
-import 'package:copy_project/GroupFragment.dart';
+import 'package:copy_project/screen/fragment/GroupFragment.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import 'data/GroupDummy.dart';
-import 'data/group/Group.dart';
+import '../data/GroupDummy.dart';
+import '../data/group/Group.dart';
 
 abstract mixin class GroupDataProvider {
   late final groupData = Get.find<GroupData>();

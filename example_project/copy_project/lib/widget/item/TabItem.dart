@@ -1,7 +1,7 @@
-import 'package:copy_project/ContactFragment.dart';
-import 'package:copy_project/GroupFragment.dart';
-import 'package:copy_project/LocationFragment.dart';
-import 'package:copy_project/RecentFragment.dart';
+import 'package:copy_project/screen/fragment/ContactFragment.dart';
+import 'package:copy_project/screen/fragment/GroupFragment.dart';
+import 'package:copy_project/screen/fragment/LocationFragment.dart';
+import 'package:copy_project/screen/fragment/RecentFragment.dart';
 import 'package:flutter/material.dart';
 
 enum TabItem {

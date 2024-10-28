@@ -1,7 +1,7 @@
-import 'package:copy_project/ConversationScreen.dart';
-import 'package:copy_project/GroupDataProvider.dart';
-import 'package:copy_project/GroupItem.dart';
-import 'package:copy_project/HorizontalLine.dart';
+import 'package:copy_project/screen/ConversationScreen.dart';
+import 'package:copy_project/common/GroupDataProvider.dart';
+import 'package:copy_project/widget/item/GroupItem.dart';
+import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nav/nav.dart';
@@ -40,8 +40,7 @@ class _GroupFragmentState extends State<GroupFragment> with GroupDataProvider {
                   groupData.specialGroup.lastIndex ?? 0,
                   onItemTap: () {},
                   onArrowTap: () {
-                    final title = "${group.groupName} (${group.memberList.length})";
-                    Nav.push(ConversationScreen(title: title,));
+                    Nav.push(ConversationScreen(title: group.groupName, memberCount: "(${group.memberList.length})",));
                   },
                 );
               },
@@ -61,7 +60,7 @@ class _GroupFragmentState extends State<GroupFragment> with GroupDataProvider {
                   groupData.normalGroup.lastIndex ?? 0,
                   onItemTap: () {},
                   onArrowTap: () {
-                    Nav.push(const ConversationScreen());
+                    Nav.push(ConversationScreen(title: group.groupName, memberCount: "(${group.memberList.length})",));
                   },
                 );
               },
