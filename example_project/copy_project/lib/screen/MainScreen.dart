@@ -1,14 +1,18 @@
-import 'package:copy_project/CircleLine.dart';
-import 'package:copy_project/TabWidget.dart';
+import 'package:copy_project/common/CommonProvider.dart';
+import 'package:copy_project/widget/ui_widget/CircleLine.dart';
+import 'package:copy_project/widget/TabWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:nav/nav.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../widget/ActiveChannel.dart';
+import '../widget/PttButton.dart';
 import 'ConversationScreen.dart';
-import 'HorizontalLine.dart';
-import 'TabItem.dart';
-import 'TabNavigator.dart';
+import '../widget/ui_widget/HorizontalLine.dart';
+import '../widget/item/TabItem.dart';
+import '../common/TabNavigator.dart';
 
 final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.group);
 
@@ -19,7 +23,7 @@ class MainScreen extends ConsumerStatefulWidget {
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends ConsumerState<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   final tabs = TabItem.values;
   late final List<GlobalKey<NavigatorState>> navigatorKeys =
       TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
@@ -31,6 +35,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   GlobalKey<NavigatorState> get _currentTabNavigationKey => navigatorKeys[_currentIndex];
 
   bool get extendBody => true;
+
+  @override
+  void initState() {
+    Get.put(KeyboardHeight());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +67,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         Expanded(child: pages),
                       ],
                     ),
-                    const Positioned(
-                      bottom: 80,
+                    Positioned(
+                      bottom: keyboardHeight.height.value + 90, // 높이 조정이 필요해보임.
                       left: 0,
                       right: 0,
-                      child: PttButton(),
+                      child: const PttButton(),
                     ),
                   ],
                 ),
@@ -87,6 +97,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   AppBar _AppBar() {
     return AppBar(
       title: "FirstNet_Copy".text.make(),
+      leading: Icon(Icons.menu),
       actions: [
         IconButton(
             onPressed: () {},
@@ -152,117 +163,5 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   void _changeTab(int index) {
     ref.read(currentTabProvider.notifier).state = tabs[index];
-  }
-}
-
-class PttButton extends StatelessWidget {
-  const PttButton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: Offset(0, 0),
-              ),
-            ],
-          ),
-        ),
-        CircleLine(
-          radius: 140.0,
-          child: Icon(
-            Icons.call,
-            size: 60,
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class ActiveChannel extends StatelessWidget {
-  const ActiveChannel({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Tap(
-      onTap: (){
-        Nav.push(const ConversationScreen());
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HorizontalLine(
-            height: 3,
-          ),
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 11, bottom: 11, left: 16),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue,
-                ),
-                child: Icon(
-                  Icons.home,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.call),
-                        "GroupName".text.make(),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.call_made_outlined),
-                        "UserName".text.make(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 11, bottom: 11, left: 16),
-                width: 47,
-                height: 36,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.red,
-                ),
-                child: Center(
-                  child: "End".text.bold.white.make(),
-                ),
-              ).pOnly(right: 16),
-            ],
-          ),
-          HorizontalLine(
-            height: 3,
-          ),
-        ],
-      ),
-    );
   }
 }

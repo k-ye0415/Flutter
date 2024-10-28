@@ -1,11 +1,11 @@
-import 'package:copy_project/HorizontalLine.dart';
-import 'package:copy_project/TabWidget.dart';
-import 'package:copy_project/VerticalLine.dart';
+import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
+import 'package:copy_project/widget/TabWidget.dart';
+import 'package:copy_project/widget/ui_widget/VerticalLine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-import 'data/group/Group.dart';
+import '../../data/group/Group.dart';
 
 class GroupItem extends StatelessWidget {
   final Group group;

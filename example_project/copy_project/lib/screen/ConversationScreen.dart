@@ -1,23 +1,45 @@
+import 'package:copy_project/common/CommonProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../widget/PttButton.dart';
 import 'MainScreen.dart';
 
 class ConversationScreen extends StatefulWidget {
-  final String? title;
-  const ConversationScreen({super.key, this.title});
+  final String title;
+  final String memberCount;
+
+  const ConversationScreen({super.key, required this.title, required this.memberCount});
 
   @override
   State<ConversationScreen> createState() => _ConversationScreenState();
 }
 
-class _ConversationScreenState extends State<ConversationScreen> {
+class _ConversationScreenState extends State<ConversationScreen> with CommonProvider {
+
+  @override
+  void initState() {
+    Get.put(KeyboardHeight());
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         appBar: AppBar(
-          title: widget.title?.text.make() ?? Text("data"),
+          title: Row(
+            children: [
+              Flexible(
+                child: Text(
+                  widget.title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+              Text(widget.memberCount),
+            ],
+          ),
           centerTitle: false,
           actions: [
             IconButton(
@@ -70,6 +92,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
               // ppt 영역
               Container(
                 color: Colors.grey,
+                height: keyboardHeight.height.value + 60 + 30, // 높이 조정이 필요해보임.,
                 child: Column(
                   children: [
                     "Tab the PTT button to speak".text.make(),

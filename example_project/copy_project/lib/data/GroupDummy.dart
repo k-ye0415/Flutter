@@ -1,4 +1,4 @@
-import 'package:copy_project/common.dart';
+import 'package:copy_project/common/common.dart';
 import 'package:copy_project/data/group/Group.dart';
 import 'package:copy_project/data/group_member/GroupMember.dart';
 
