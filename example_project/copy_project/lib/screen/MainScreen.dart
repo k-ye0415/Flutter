@@ -17,7 +17,8 @@ import '../common/TabNavigator.dart';
 final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.group);
 
 class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({super.key});
+  final double keyboardHeight;
+  const MainScreen(this.keyboardHeight, {super.key});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();
@@ -39,11 +40,15 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   @override
   void initState() {
     Get.put(KeyboardHeight());
+    setState(() {
+      keyboardHeight.height.value = widget.keyboardHeight;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("MainScreen height : ${keyboardHeight.height.value}");
     return Material(
       child: Stack(
         children: [

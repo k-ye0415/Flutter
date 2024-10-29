@@ -39,7 +39,7 @@ class MessageItem extends StatelessWidget {
                                 size: 16,
                               )
                             : goneWidget,
-                        isIncoming ? goneWidget : message.sendTime.formattedTime.text.make(),
+                        isIncoming ? goneWidget : message.sendTime.formattedTime.text.color(Colors.white).make(),
                       ],
                     ).pOnly(right: 4),
               // bubble
@@ -91,7 +91,7 @@ class MessageItem extends StatelessWidget {
                                 size: 16,
                               )
                             : goneWidget,
-                        isIncoming ? message.sendTime.formattedTime.text.make() : goneWidget,
+                        isIncoming ? message.sendTime.formattedTime.text.color(Colors.white).make() : goneWidget,
                       ],
                     ).pOnly(left: 4)
                   : goneWidget

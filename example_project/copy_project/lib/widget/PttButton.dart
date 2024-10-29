@@ -12,8 +12,8 @@ class PttButton extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: 150,
-          height: 150,
+          width: 144,
+          height: 144,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,
@@ -28,7 +28,7 @@ class PttButton extends StatelessWidget {
           ),
         ),
         CircleLine(
-          radius: 140.0,
+          radius: 134.0,
           child: Icon(
             Icons.call,
             size: 60,
