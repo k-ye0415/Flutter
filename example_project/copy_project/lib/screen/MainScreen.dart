@@ -1,7 +1,9 @@
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
+import 'package:copy_project/screen/MenuDrawer.dart';
 import 'package:copy_project/widget/ui_widget/CircleLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -57,6 +59,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
             backgroundColor: context.appColors.defaultBackground,
             appBar: _AppBar(),
             extendBody: extendBody,
+            drawer: MenuDrawer(),
             //bottomNavigationBar 아래 영역 까지 그림
             // drawer: const MenuDrawer(),
             // drawerEnableOpenDragGesture: !Platform.isIOS,
@@ -115,7 +118,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
       backgroundColor: context.appColors.appbarBackground,
-      leading: Icon(Icons.menu),
+      automaticallyImplyLeading: true,
       actions: [
         IconButton(
             onPressed: () {},
