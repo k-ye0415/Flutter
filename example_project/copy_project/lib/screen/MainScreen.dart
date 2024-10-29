@@ -1,6 +1,9 @@
 import 'package:copy_project/common/CommonProvider.dart';
+import 'package:copy_project/common/extension/ContextExtension.dart';
+import 'package:copy_project/screen/MenuDrawer.dart';
 import 'package:copy_project/widget/ui_widget/CircleLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -17,7 +20,8 @@ import '../common/TabNavigator.dart';
 final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.group);
 
 class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({super.key});
+  final double keyboardHeight;
+  const MainScreen(this.keyboardHeight, {super.key});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();
@@ -39,17 +43,23 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   @override
   void initState() {
     Get.put(KeyboardHeight());
+    setState(() {
+      keyboardHeight.height.value = widget.keyboardHeight;
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("MainScreen height : ${keyboardHeight.height.value}");
     return Material(
       child: Stack(
         children: [
           Scaffold(
+            backgroundColor: context.appColors.defaultBackground,
             appBar: _AppBar(),
             extendBody: extendBody,
+            drawer: MenuDrawer(),
             //bottomNavigationBar 아래 영역 까지 그림
             // drawer: const MenuDrawer(),
             // drawerEnableOpenDragGesture: !Platform.isIOS,
@@ -68,10 +78,13 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
                       ],
                     ),
                     Positioned(
-                      bottom: keyboardHeight.height.value + 90, // 높이 조정이 필요해보임.
                       left: 0,
                       right: 0,
-                      child: const PttButton(),
+                      bottom: extendBody ? 60 - 30 : 0,
+                      child: Container(
+                        height: keyboardHeight.height.value,
+                        child: PttButton(),
+                      ),
                     ),
                   ],
                 ),
@@ -80,6 +93,11 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
             resizeToAvoidBottomInset: false,
             bottomNavigationBar: Container(
               child: BottomNavigationBar(
+                selectedItemColor: Colors.orange,
+                unselectedItemColor: Color(0xFFbfbfbf),
+                // this.selectedIconTheme,
+                // this.unselectedIconTheme,
+                backgroundColor: Color(0xFF0b0b0b),
                 items: navigationBarItems(context),
                 currentIndex: _currentIndex,
                 onTap: _handleOnTapNavigationBarItem,
@@ -97,7 +115,10 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   AppBar _AppBar() {
     return AppBar(
       title: "FirstNet_Copy".text.make(),
-      leading: Icon(Icons.menu),
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+      backgroundColor: context.appColors.appbarBackground,
+      automaticallyImplyLeading: true,
       actions: [
         IconButton(
             onPressed: () {},

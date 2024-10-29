@@ -31,7 +31,7 @@ class GroupItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.green[100],
+          color: Color(0xFF202020),
           borderRadius: lastItem
               ? const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
@@ -59,11 +59,20 @@ class GroupItem extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  group.groupName.text.size(21).make(),
-                                  "(${group.memberList.length})".text.size(21).make(),
+                                  group.groupName.text.size(18).color(Colors.white).make(),
+                                  "(${group.memberList.length})"
+                                      .text
+                                      .size(18)
+                                      .color(Colors.white)
+                                      .make(),
                                 ],
                               ),
-                              group.groupDescription.text.make().pOnly(bottom: 10),
+                              group.groupDescription.text
+                                  .size(13)
+                                  .color(Color(0xFFb2b2b2))
+                                  .
+                              make()
+                                  .pOnly(bottom: 10),
                             ],
                           ),
                         ),

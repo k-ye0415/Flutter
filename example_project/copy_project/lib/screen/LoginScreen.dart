@@ -61,22 +61,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ).pOnly(top: 120),
                 HeightBox(60),
-                EditTextWidget(idTextController, hint: "한번 클릭해주세요!!", mContext: context),
+                EditTextWidget(idTextController, hint: "한번 클릭해주세요!!"),
                 HeightBox(12),
-                // EditTextWidget(
-                //   pwTextController,
-                //   hint: "키보드 높이때문에 그래요!!!",
-                // ),
+                EditTextWidget(
+                  pwTextController,
+                  hint: "키보드 높이때문에 그래요!!!",
+                ),
                 HeightBox(24),
                 RoundedButton(
                   text: "Sign in",
                   bgColor: context.appColors.pointColor,
                   onTap: () {
-                    // setState(() {
-                    //   keyboardHeight
-                    // });
-                    debugPrint("keyboardHeight : $keyboardHeight");
-                    Nav.push(MainScreen());
+                    debugPrint("Login Screen keyboardHeight : $keyboardHeight");
+                    Nav.push(MainScreen(keyboardHeight));
                   },
                 ),
               ],

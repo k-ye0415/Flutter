@@ -1,4 +1,5 @@
-import 'package:copy_project/data/group_member/GroupMember.dart';
+
+import 'group_member/GroupMember.dart';
 
 class Group {
   final GroupPriority priority;

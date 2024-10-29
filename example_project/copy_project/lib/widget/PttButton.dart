@@ -12,14 +12,14 @@ class PttButton extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Container(
-          width: 150,
-          height: 150,
+          width: 144,
+          height: 144,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white,
+            color: Color(0xFF202020),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
+                color: Color(0xFF202020).withOpacity(0.3),
                 spreadRadius: 5,
                 blurRadius: 7,
                 offset: Offset(0, 0),
@@ -28,9 +28,12 @@ class PttButton extends StatelessWidget {
           ),
         ),
         CircleLine(
-          radius: 140.0,
+          borderSize: 4.0,
+          radius: 134.0,
+          foregroundColor: Color(0xFF202020),
           child: Icon(
             Icons.call,
+            color: Colors.blue,
             size: 60,
           ),
         )
