@@ -1,5 +1,5 @@
 import 'package:copy_project/screen/ConversationScreen.dart';
-import 'package:copy_project/common/GroupDataProvider.dart';
+import 'package:copy_project/data/group/GroupDataProvider.dart';
 import 'package:copy_project/widget/item/GroupItem.dart';
 import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:flutter/material.dart';

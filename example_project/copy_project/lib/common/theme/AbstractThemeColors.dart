@@ -9,4 +9,8 @@ abstract class AbstractThemeColors {
   Color get editTextBorder => const Color(0xFF53585e);
 
   Color get defaultBackground => const Color(0xFF0b0b0b);
+
+  Color get incomingBubble => const Color(0xFF454545);
+
+  Color get outgoingBubble => const Color(0xFFe86e33);
 }

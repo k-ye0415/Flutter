@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 class EditTextWidget extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
-  final BuildContext mContext;
+  final BuildContext context;
 
-  const EditTextWidget(this.controller, {super.key, required this.hint, required this.mContext});
+  const EditTextWidget(this.controller, {super.key, required this.hint, required this.context});
 
   @override
   State<EditTextWidget> createState() => _EditTextWidgetState();
@@ -55,9 +55,7 @@ class _EditTextWidgetState extends State<EditTextWidget> with CommonProvider {
     if (_focusNode.hasFocus) {
       Future.delayed(Duration(milliseconds: 100), () {
         setState(() {
-          keyboardHeight.height.value = MediaQuery.of(widget.mContext).viewInsets.bottom;
-          debugPrint(
-              "keyboardHeight.keyboardHeight.value : ${keyboardHeight.height.value}\n MediaQuery.of(context).viewInsets.bottom : ${MediaQuery.of(context).viewInsets.bottom}");
+          keyboardHeight.height.value = MediaQuery.of(widget.context).viewInsets.bottom;
         });
       });
     }

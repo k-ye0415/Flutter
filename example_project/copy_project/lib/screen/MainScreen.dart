@@ -68,10 +68,13 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
                       ],
                     ),
                     Positioned(
-                      bottom: keyboardHeight.height.value + 90, // 높이 조정이 필요해보임.
                       left: 0,
                       right: 0,
-                      child: const PttButton(),
+                      bottom: extendBody ? 60 - 30 : 0,
+                      child: Container(
+                        height: keyboardHeight.height.value,
+                        child: PttButton(),
+                      ),
                     ),
                   ],
                 ),
