@@ -1,4 +1,5 @@
 import 'package:copy_project/common/CommonProvider.dart';
+import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/widget/ui_widget/CircleLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
       child: Stack(
         children: [
           Scaffold(
+            backgroundColor: context.appColors.defaultBackground,
             appBar: _AppBar(),
             extendBody: extendBody,
             //bottomNavigationBar 아래 영역 까지 그림
@@ -88,6 +90,11 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
             resizeToAvoidBottomInset: false,
             bottomNavigationBar: Container(
               child: BottomNavigationBar(
+                selectedItemColor: Colors.orange,
+                unselectedItemColor: Color(0xFFbfbfbf),
+                // this.selectedIconTheme,
+                // this.unselectedIconTheme,
+                backgroundColor: Color(0xFF0b0b0b),
                 items: navigationBarItems(context),
                 currentIndex: _currentIndex,
                 onTap: _handleOnTapNavigationBarItem,
@@ -105,6 +112,9 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   AppBar _AppBar() {
     return AppBar(
       title: "FirstNet_Copy".text.make(),
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+      backgroundColor: context.appColors.appbarBackground,
       leading: Icon(Icons.menu),
       actions: [
         IconButton(
