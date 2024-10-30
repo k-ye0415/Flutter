@@ -13,6 +13,7 @@ class GroupData extends GetxController {
   List<Group> groupList = <Group>[].obs;
   List<Group> specialGroup = <Group>[].obs;
   List<Group> normalGroup = <Group>[].obs;
+  Rxn<Group> selectedGroup = Rxn<Group>();
 
   @override
   void onInit() {

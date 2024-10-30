@@ -1,43 +1,63 @@
+import 'package:copy_project/data/settings/SettingProvider.dart';
+import 'package:copy_project/data/settings/Settings.dart';
 import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
+import 'package:copy_project/widget/ui_widget/VerticalLine.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class SettingItem extends StatefulWidget {
   final IconData icon;
   final String title;
   final String description;
-  final bool isUsedSwitch;
+  final Setting? usedSwitchAndValue;
   final ShapeType shapeType;
   final bool isCovertMode;
+  final ValueChanged<bool>? onSwitchChanged;
+  final bool isEnable;
 
-  const SettingItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    this.description = "",
-    required this.isUsedSwitch,
-    this.shapeType = ShapeType.middle,
-    this.isCovertMode = false,
-  });
+  const SettingItem(
+      {super.key,
+      required this.icon,
+      required this.title,
+      this.description = "",
+      this.usedSwitchAndValue = null,
+      this.shapeType = ShapeType.middle,
+      this.isCovertMode = false,
+      this.onSwitchChanged,
+      this.isEnable = true});
 
   @override
   State<SettingItem> createState() => _SettingItemState();
 }
 
-class _SettingItemState extends State<SettingItem> {
+class _SettingItemState extends State<SettingItem> with SettingProvider {
+  @override
+  void initState() {
+    Get.put(SettingsData());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final needRadius = widget.shapeType == ShapeType.top || widget.shapeType == ShapeType.only;
+    final isTop = widget.shapeType == ShapeType.top;
+    final isBottom = widget.shapeType == ShapeType.bottom;
+    final isOnly = widget.shapeType == ShapeType.only;
+    if (widget.isCovertMode) debugPrint("title : ${widget.title}");
     return Container(
       decoration: BoxDecoration(
         color: Color(0xFF202020),
-        borderRadius: BorderRadius.only(
-          topLeft: needRadius ? Radius.circular(10) : Radius.circular(0),
-          topRight: needRadius ? Radius.circular(10) : Radius.circular(0),
-          bottomLeft: needRadius ? Radius.circular(10) : Radius.circular(0),
-          bottomRight: needRadius ? Radius.circular(10) : Radius.circular(0),
-        ),
+        borderRadius: isOnly
+            ? BorderRadius.all(Radius.circular(10))
+            : BorderRadius.only(
+                topLeft: Radius.circular(isTop ? 10 : 0),
+                topRight: Radius.circular(isTop ? 10 : 0),
+                bottomLeft: Radius.circular(isBottom ? 10 : 0),
+                bottomRight: Radius.circular(isBottom ? 10 : 0),
+              ),
       ),
       child: Column(
         children: [
@@ -60,28 +80,45 @@ class _SettingItemState extends State<SettingItem> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                widget.title.text.size(18).color(Colors.white).make(),
+                                widget.title.text
+                                    .size(18)
+                                    .color(widget.isEnable ? Colors.white : Color(0xFF8f8f8f))
+                                    .make(),
                                 widget.description.isNotEmpty
                                     ? widget.description.text.color(Color(0xFF8f8f8f)).make()
                                     : goneWidget
                               ],
                             ),
                           ),
-                          widget.isUsedSwitch
-                              ? SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: Switch(value: false, onChanged: (value) {}),
-                                  ),
-                                )
-                              : widget.isCovertMode
-                                  ? Icon(
-                                      Icons.contrast,
-                                      color: Colors.white,
+                          Stack(
+                            children: [
+                              widget.isCovertMode
+                                  ? IconButton(
+                                      onPressed: () {}, // 화면 이동
+                                      icon: Icon(
+                                        Icons.contrast,
+                                        color: Colors.white,
+                                        size: 32,
+                                      ),
                                     )
-                                  : goneWidget
+                                  : goneWidget,
+                              widget.usedSwitchAndValue != null
+                                  ? CupertinoSwitch(
+                                      trackColor: Colors.grey[200],
+                                      value: widget.usedSwitchAndValue!.isUsed,
+                                      onChanged: widget.isEnable
+                                          ? (value) {
+                                              setState(() {
+                                                // settingProvider.dndSetting.value = Setting(widget.usedSwitchAndValue!.type, value);
+                                                if (widget.onSwitchChanged != null) {
+                                                  widget.onSwitchChanged!(value);
+                                                }
+                                              });
+                                            }
+                                          : null)
+                                  : goneWidget,
+                            ],
+                          )
                         ],
                       ),
                     ],

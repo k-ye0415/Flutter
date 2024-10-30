@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   bgColor: context.appColors.pointColor,
                   onTap: () {
                     debugPrint("Login Screen keyboardHeight : $keyboardHeight");
-                    Nav.push(MainScreen(keyboardHeight));
+                    Nav.clearAllAndPush(MainScreen(keyboardHeight));
                   },
                 ),
               ],

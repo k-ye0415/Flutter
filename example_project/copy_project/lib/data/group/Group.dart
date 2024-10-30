@@ -1,4 +1,3 @@
-
 import 'group_member/GroupMember.dart';
 
 class Group {

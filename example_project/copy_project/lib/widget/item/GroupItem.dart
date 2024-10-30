@@ -1,3 +1,4 @@
+import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
 import 'package:copy_project/widget/ui_widget/VerticalLine.dart';
@@ -13,6 +14,7 @@ class GroupItem extends StatelessWidget {
   final int lastIndex;
   final VoidCallback onItemTap;
   final VoidCallback onArrowTap;
+  final bool isSelected;
 
   const GroupItem(
     this.group,
@@ -21,6 +23,7 @@ class GroupItem extends StatelessWidget {
     super.key,
     required this.onItemTap,
     required this.onArrowTap,
+    required this.isSelected,
   });
 
   @override
@@ -31,13 +34,11 @@ class GroupItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Color(0xFF202020),
-          borderRadius: lastItem
-              ? const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                )
-              : null,
+          color: isSelected ? Color(0xFF35383d) : Color(0xFF202020),
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(lastItem ? 20 : 0),
+            bottomRight: Radius.circular(lastItem ? 20 : 0),
+          ),
         ),
         child: Container(
           // content
@@ -70,8 +71,7 @@ class GroupItem extends StatelessWidget {
                               group.groupDescription.text
                                   .size(13)
                                   .color(Color(0xFFb2b2b2))
-                                  .
-                              make()
+                                  .make()
                                   .pOnly(bottom: 10),
                             ],
                           ),
@@ -87,6 +87,8 @@ class GroupItem extends StatelessWidget {
                       const HorizontalLine(
                         color: Colors.grey,
                       ) // divider
+                    else
+                      goneWidget
                   ],
                 ),
               ),
