@@ -10,6 +10,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../data/settings/Settings.dart';
 import '../widget/BottomSheet.dart';
+import '../widget/NormalDialog.dart';
 import '../widget/item/SettingItem.dart';
 import '../widget/ui_widget/VerticalLine.dart';
 
@@ -29,14 +30,17 @@ class _MenuDrawerState extends State<MenuDrawer> with SettingProvider {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("settingProvider.covertSetting.value.isUsed : ${settingProvider.covertSetting.value.isUsed}");
+    debugPrint(
+        "settingProvider.covertSetting.value.isUsed : ${settingProvider.covertSetting.value.isUsed}");
     return SafeArea(
       child: Container(
         color: context.appColors.defaultBackground,
         child: Column(
           children: [
             // user info
-            _UserInfo(),
+            Obx(
+              () => _UserInfo(),
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -146,7 +150,8 @@ class _MenuDrawerState extends State<MenuDrawer> with SettingProvider {
                                       value == "Covert mode"
                                           ? settingProvider.covertSetting.value.isUsed = true
                                           : settingProvider.covertSetting.value.isUsed = false;
-                                      debugPrint("settingProvider.covertSetting.value.isUsed : ${settingProvider.covertSetting.value.isUsed}");
+                                      debugPrint(
+                                          "settingProvider.covertSetting.value.isUsed : ${settingProvider.covertSetting.value.isUsed}");
                                     });
                                   },
                                 );
@@ -213,8 +218,16 @@ class _MenuDrawerState extends State<MenuDrawer> with SettingProvider {
                     /// section 5
                     /// logout
                     const HeightBox(8),
-                    const SettingItem(
-                        icon: Icons.logout, title: "Sign out", shapeType: ShapeType.only),
+                    Tap(
+                      onTap: (){
+                        NormalDialog(description: "Are you sure you want to sign out?",).show();
+                        // showDialog(context: context, builder: ((context) {
+                        //   return NormalDialog();
+                        // }));
+                      },
+                      child: const SettingItem(
+                          icon: Icons.logout, title: "Sign out", shapeType: ShapeType.only),
+                    ),
                     // app logo
                     const HeightBox(8),
                     Container(
@@ -242,6 +255,7 @@ class _MenuDrawerState extends State<MenuDrawer> with SettingProvider {
   }
 
   Container _UserInfo() {
+    final isDnd = settingProvider.dndSetting.value.isUsed;
     return Container(
       color: Color(0xFF343434),
       child: Column(
@@ -259,13 +273,19 @@ class _MenuDrawerState extends State<MenuDrawer> with SettingProvider {
           Container(
             width: 48,
             height: 48,
-            decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.green),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: isDnd ? Colors.red : Colors.green),
             child: Icon(
-              Icons.person_rounded,
+              isDnd ? Icons.minimize : Icons.person_rounded,
               color: Colors.white,
             ),
           ).pOnly(bottom: 4),
-          "Online".text.size(14).color(Colors.white).make().pOnly(bottom: 13),
+          (isDnd ? "Do not disturb" : "Online")
+              .text
+              .size(14)
+              .color(Colors.white)
+              .make()
+              .pOnly(bottom: 13),
           "Donald Jenson".text.size(20).color(Colors.white).bold.make().pOnly(bottom: 3),
           "0576110".text.size(15).color(Color(0xFF8f8f8f)).make().pOnly(bottom: 16),
         ],
