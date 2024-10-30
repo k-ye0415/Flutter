@@ -50,117 +50,11 @@ class _ConversationScreenState extends State<ConversationScreen>
           child: Column(
             children: [
               // chat list 영역
-              Expanded(
-                // child: Container(),
-                child: Obx(
-                  () => ListView.builder(
-                    itemBuilder: (context, index) {
-                      final message = messageData.msgList[index];
-                      return MessageItem(message);
-                    },
-                    itemCount: messageData.msgList.length,
-                  ).pOnly(top: 10),
-                ),
-              ),
+              _chatListArea(),
               // text 입력 영역
-              Container(
-                color: Colors.black,
-                child: Row(
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.chat,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      highlightColor: context.appColors.defaultRipple,
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.location_on,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      highlightColor: context.appColors.defaultRipple,
-                    ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.file_copy,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                      highlightColor: context.appColors.defaultRipple,
-                    ),
-                    Expanded(
-                      child: TextField(),
-                      // child: EditTextWidget(inputTextController,
-                      //     hint: "Input message", context: context),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 11, bottom: 11, left: 16),
-                      width: 46,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.grey,
-                      ),
-                      child: Center(
-                        child: "SEND".text.bold.white.make(),
-                      ),
-                    ).pOnly(right: 20),
-                  ],
-                ),
-              ),
+              _inputArea(context),
               // ppt 영역
-              AnimatedContainer(
-                duration: Duration(milliseconds: 0),
-                color: context.appColors.pttAreaBackground,
-                height: isKeyboardVisible ? 0 : keyboardHeight.height.value,
-                child: Column(
-                  children: [
-                    "Tab the PTT button to speak"
-                        .text
-                        .color(context.appColors.normalText)
-                        .size(12)
-                        .make()
-                        .pOnly(top: 18, bottom: 40),
-                    PttButton(),
-                    Row(
-                      children: [
-                        CircleLine(
-                          borderColor: Color(0xFF4F4F4F),
-                          borderSize: 1.0,
-                          foregroundColor: Color(0xFF202020),
-                          radius: 40.0,
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.video_camera_back_rounded),
-                            highlightColor: context.appColors.defaultRipple,
-                          ),
-                        ).pOnly(left: 50),
-                        Spacer(),
-                        CircleLine(
-                          borderColor: Color(0xFF4F4F4F),
-                          borderSize: 1.0,
-                          foregroundColor: Color(0xFF202020),
-                          radius: 40.0,
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(Icons.speaker),
-                            highlightColor: context.appColors.defaultRipple,
-                          ),
-                        ).pOnly(right: 50),
-                      ],
-                    )
-                  ],
-                ),
-              )
+              _pttArea(context, isKeyboardVisible)
               // Container(
               //   color: context.appColors.pttAreaBackground,
               //   height: keyboardHeight.height.value, // 높이 조정이 필요해보임.,
@@ -206,6 +100,145 @@ class _ConversationScreenState extends State<ConversationScreen>
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  AnimatedContainer _pttArea(BuildContext context, bool isKeyboardVisible) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 0),
+      color: context.appColors.pttAreaBackground,
+      height: isKeyboardVisible ? 0 : keyboardHeight.height.value,
+      child: Column(
+        children: [
+          "Tab the PTT button to speak"
+              .text
+              .color(context.appColors.normalText)
+              .size(12)
+              .make()
+              .pOnly(top: 18, bottom: 40),
+          PttButton(),
+          Row(
+            children: [
+              CircleLine(
+                borderColor: Color(0xFF4F4F4F),
+                borderSize: 1.0,
+                foregroundColor: Color(0xFF202020),
+                radius: 40.0,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.video_camera_back_rounded),
+                  highlightColor: context.appColors.defaultRipple,
+                ),
+              ).pOnly(left: 50),
+              Spacer(),
+              CircleLine(
+                borderColor: Color(0xFF4F4F4F),
+                borderSize: 1.0,
+                foregroundColor: Color(0xFF202020),
+                radius: 40.0,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(Icons.speaker),
+                  highlightColor: context.appColors.defaultRipple,
+                ),
+              ).pOnly(right: 50),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Container _inputArea(BuildContext context) {
+    return Container(
+      color: Colors.black,
+      child: Row(
+        children: [
+          IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {},
+            icon: Icon(
+              Icons.chat,
+              color: Colors.white,
+              size: 20,
+            ),
+            highlightColor: context.appColors.defaultRipple,
+          ),
+          IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {},
+            icon: Icon(
+              Icons.location_on,
+              color: Colors.white,
+              size: 20,
+            ),
+            highlightColor: context.appColors.defaultRipple,
+          ),
+          IconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {},
+            icon: Icon(
+              Icons.file_copy,
+              color: Colors.white,
+              size: 20,
+            ),
+            highlightColor: context.appColors.defaultRipple,
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.red,
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: "(0/1012)".text.color(Color(0xFFb2b2b2)).size(9).make(),
+                  ),
+                  TextField(
+                    cursorColor: context.appColors.pointColor,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        isDense: true,
+                        hintText: "Input message",
+                        hintStyle: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF8e8e8e),
+                        )),
+                  ),
+                ],
+              ),
+            ),
+            // child: EditTextWidget(inputTextController,
+            //     hint: "Input message", context: context),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 11, bottom: 11, left: 16),
+            width: 46,
+            height: 30,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.grey,
+            ),
+            child: Center(
+              child: "SEND".text.bold.white.make(),
+            ),
+          ).pOnly(right: 20),
+        ],
+      ),
+    );
+  }
+
+  Expanded _chatListArea() {
+    return Expanded(
+      // child: Container(),
+      child: Obx(
+        () => ListView.builder(
+          itemBuilder: (context, index) {
+            final message = messageData.msgList[index];
+            return MessageItem(message);
+          },
+          itemCount: messageData.msgList.length,
+        ).pOnly(top: 10),
       ),
     );
   }
