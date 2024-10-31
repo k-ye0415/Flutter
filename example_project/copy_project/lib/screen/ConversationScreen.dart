@@ -2,6 +2,7 @@ import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/data/message/MessageDataProvider.dart';
 import 'package:copy_project/widget/EditTextWidget.dart';
+import 'package:copy_project/widget/RoundedButton.dart';
 import 'package:copy_project/widget/item/MessageItem.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -154,22 +155,13 @@ class _ConversationScreenState extends State<ConversationScreen>
     return Container(
       color: Colors.black,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
             padding: EdgeInsets.zero,
             onPressed: () {},
             icon: Icon(
               Icons.chat,
-              color: Colors.white,
-              size: 20,
-            ),
-            highlightColor: context.appColors.defaultRipple,
-          ),
-          IconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {},
-            icon: Icon(
-              Icons.location_on,
               color: Colors.white,
               size: 20,
             ),
@@ -187,23 +179,31 @@ class _ConversationScreenState extends State<ConversationScreen>
           ),
           Expanded(
             child: Container(
-              color: Colors.red,
+              // color: Colors.red,
               child: Column(
                 children: [
                   Align(
                     alignment: Alignment.topRight,
-                    child: "(0/1012)".text.color(Color(0xFFb2b2b2)).size(9).make(),
+                    child: Text(
+                      "(${inputTextController.text.length}/1012)",
+                      style: TextStyle(color: Color(0xFFb2b2b2), fontSize: 9, height: -1),
+                    ),
                   ),
                   TextField(
+                    controller: inputTextController,
                     cursorColor: context.appColors.pointColor,
+                    cursorWidth: 1,
+                    cursorHeight: 18,
+                    style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
-                        border: InputBorder.none,
-                        isDense: true,
-                        hintText: "Input message",
-                        hintStyle: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF8e8e8e),
-                        )),
+                      border: InputBorder.none,
+                      isDense: true,
+                      hintText: "Input message",
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF8e8e8e),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -216,11 +216,12 @@ class _ConversationScreenState extends State<ConversationScreen>
             width: 46,
             height: 30,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: Colors.grey,
-            ),
+                borderRadius: BorderRadius.circular(8),
+                color: inputTextController.text.length > 0
+                    ? context.appColors.pointColor
+                    : Colors.grey),
             child: Center(
-              child: "SEND".text.bold.white.make(),
+              child: "SEND".text.size(12).white.make(),
             ),
           ).pOnly(right: 20),
         ],
