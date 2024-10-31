@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/data/message/Message.dart';
@@ -6,8 +8,10 @@ import 'package:copy_project/widget/EditTextWidget.dart';
 import 'package:copy_project/widget/RoundedButton.dart';
 import 'package:copy_project/widget/TabWidget.dart';
 import 'package:copy_project/widget/item/MessageItem.dart';
+import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../widget/PttButton.dart';
@@ -28,6 +32,9 @@ class _ConversationScreenState extends State<ConversationScreen>
     with CommonProvider, MessageDataProvider {
   final inputTextController = TextEditingController();
   final scrollController = ScrollController();
+  bool isFileMode = false;
+  final ImagePicker picker = ImagePicker();
+  XFile? _image;
 
   @override
   void initState() {
@@ -55,6 +62,8 @@ class _ConversationScreenState extends State<ConversationScreen>
             children: [
               // chat list 영역
               _chatListArea(),
+              // file attach 영역
+              _image != null ? _fileAttachLayout() : goneWidget,
               // text 입력 영역
               _inputArea(context),
               // ppt 영역
@@ -108,47 +117,170 @@ class _ConversationScreenState extends State<ConversationScreen>
     );
   }
 
+  Future getImage(ImageSource imageSource) async {
+    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(pickedFile.path);
+      });
+    }
+  }
+
+// widgets
   AnimatedContainer _pttArea(BuildContext context, bool isKeyboardVisible) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 0),
       color: context.appColors.pttAreaBackground,
       height: isKeyboardVisible ? 0 : keyboardHeight.height.value,
-      child: Column(
+      child: Stack(
         children: [
-          "Tab the PTT button to speak"
-              .text
-              .color(context.appColors.normalText)
-              .size(12)
-              .make()
-              .pOnly(top: 18, bottom: 40),
-          PttButton(),
-          Row(
-            children: [
-              CircleLine(
-                borderColor: Color(0xFF4F4F4F),
-                borderSize: 1.0,
-                foregroundColor: Color(0xFF202020),
-                radius: 40.0,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.video_camera_back_rounded),
-                  highlightColor: context.appColors.defaultRipple,
+          isFileMode ? _fileLayout() : _pttLayout(context),
+        ],
+      ),
+    );
+  }
+
+  Container _fileLayout() {
+    return Container(
+      color: Color(0xFF161719),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Tap(
+                  onTap: () {
+                    getImage(ImageSource.gallery);
+                  },
+                  child: _iconWithLabel(Colors.green, Icons.image, "Photo"),
                 ),
-              ).pOnly(left: 50),
-              Spacer(),
-              CircleLine(
-                borderColor: Color(0xFF4F4F4F),
-                borderSize: 1.0,
-                foregroundColor: Color(0xFF202020),
-                radius: 40.0,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.speaker),
-                  highlightColor: context.appColors.defaultRipple,
+                Tap(
+                  onTap: () {
+                    getImage(ImageSource.camera);
+                  },
+                  child: _iconWithLabel(Colors.redAccent, Icons.camera_alt_outlined, "Camera")
+                      .pOnly(top: 18),
                 ),
-              ).pOnly(right: 50),
-            ],
-          )
+              ],
+            ),
+          ),
+          Expanded(
+            child: _iconWithLabel(Colors.purple, Icons.video_camera_back_outlined, "Video"),
+          ),
+          Expanded(
+            child: _iconWithLabel(Colors.blue, Icons.audiotrack_outlined, "Audio"),
+          ),
+          Expanded(
+            child: _iconWithLabel(Colors.orange, Icons.folder_copy, "Folder"),
+          ),
+        ],
+      ).pOnly(top: 18),
+    );
+  }
+
+  Widget _iconWithLabel(Color color, IconData icon, String label) {
+    return Column(
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            color: color,
+          ),
+          child: Icon(
+            icon,
+            size: 35,
+            color: Colors.white,
+          ),
+        ),
+        label.text.size(12).color(Colors.white).make().pOnly(top: 8),
+      ],
+    );
+  }
+
+  Column _pttLayout(BuildContext context) {
+    return Column(
+      children: [
+        "Tab the PTT button to speak"
+            .text
+            .color(context.appColors.normalText)
+            .size(12)
+            .make()
+            .pOnly(top: 18, bottom: 40),
+        PttButton(),
+        Row(
+          children: [
+            CircleLine(
+              borderColor: Color(0xFF4F4F4F),
+              borderSize: 1.0,
+              foregroundColor: Color(0xFF202020),
+              radius: 40.0,
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.video_camera_back_rounded),
+                highlightColor: context.appColors.defaultRipple,
+              ),
+            ).pOnly(left: 50),
+            Spacer(),
+            CircleLine(
+              borderColor: Color(0xFF4F4F4F),
+              borderSize: 1.0,
+              foregroundColor: Color(0xFF202020),
+              radius: 40.0,
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.speaker),
+                highlightColor: context.appColors.defaultRipple,
+              ),
+            ).pOnly(right: 50),
+          ],
+        )
+      ],
+    );
+  }
+
+  Container _fileAttachLayout() {
+    return Container(
+      height: 96,
+      color: Color(0xFF202020),
+      child: Stack(
+        children: [
+          Center(
+            child: Container(
+              width: 55,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: Image.file(
+                File(_image!.path),
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Column(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _image = null;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+                Spacer(),
+                "20%".text.color(Colors.white).make()
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -162,7 +294,9 @@ class _ConversationScreenState extends State<ConversationScreen>
         children: [
           IconButton(
             padding: EdgeInsets.zero,
-            onPressed: () {},
+            onPressed: () {
+              // 키보드?
+            },
             icon: Icon(
               Icons.chat,
               color: Colors.white,
@@ -172,9 +306,14 @@ class _ConversationScreenState extends State<ConversationScreen>
           ),
           IconButton(
             padding: EdgeInsets.zero,
-            onPressed: () {},
+            onPressed: () {
+              // file attach layout
+              setState(() {
+                isFileMode = !isFileMode;
+              });
+            },
             icon: Icon(
-              Icons.file_copy,
+              isFileMode ? Icons.close : Icons.file_copy,
               color: Colors.white,
               size: 20,
             ),

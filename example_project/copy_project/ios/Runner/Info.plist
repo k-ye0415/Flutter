@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>이렇게 권한을 확인하는 메세지를 띄운다고..????????</string>
+	<key>NSCameraUsageDescription</key>
+	<string>개신기하네..</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>흠...</string>
 </dict>
 </plist>
