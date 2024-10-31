@@ -38,8 +38,8 @@ class _BottomSheetWidgetState extends State<BottomSheetWidget> {
       decoration: BoxDecoration(
         color: Color(0xFF2a2c2e),
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(10),
-          topLeft: Radius.circular(10),
+          topRight: radius10,
+          topLeft: radius10,
         ),
       ),
       child: Column(

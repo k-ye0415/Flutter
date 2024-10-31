@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:copy_project/data/message/Message.dart';
 
 final message1 = Message(
+  getRandomId(),
   "Another User",
   "message",
   Direction.incoming,
@@ -11,6 +12,7 @@ final message1 = Message(
   null,
 );
 final message2 = Message(
+  getRandomId(),
   "Me",
   "Emergency Alert",
   Direction.outgoing,
@@ -19,6 +21,7 @@ final message2 = Message(
   null,
 );
 final message3 = Message(
+  getRandomId(),
   "Me",
   "10:40",
   Direction.outgoing,
@@ -27,6 +30,7 @@ final message3 = Message(
   MediaType.voice,
 );
 final message4 = Message(
+  getRandomId(),
   "Another User",
   "10:40",
   Direction.incoming,
@@ -35,6 +39,7 @@ final message4 = Message(
   MediaType.video,
 );
 final message5 = Message(
+  getRandomId(),
   "Another User",
   "message",
   Direction.incoming,
@@ -43,6 +48,7 @@ final message5 = Message(
   null,
 );
 final message6 = Message(
+  getRandomId(),
   "Me",
   "We Belong Together",
   Direction.outgoing,
@@ -51,6 +57,7 @@ final message6 = Message(
   null,
 );
 final message7 = Message(
+  getRandomId(),
   "Me",
   "10:40",
   Direction.outgoing,
@@ -59,6 +66,7 @@ final message7 = Message(
   MediaType.voice,
 );
 final message8 = Message(
+  getRandomId(),
   "Another User",
   "10:40",
   Direction.incoming,
@@ -67,6 +75,7 @@ final message8 = Message(
   MediaType.video,
 );
 final message9 = Message(
+  getRandomId(),
   "Another User",
   "message",
   Direction.incoming,
@@ -75,6 +84,7 @@ final message9 = Message(
   null,
 );
 final message10 = Message(
+  getRandomId(),
   "Another User",
   "Emergency Alert",
   Direction.incoming,
@@ -83,6 +93,7 @@ final message10 = Message(
   null,
 );
 final message11 = Message(
+  getRandomId(),
   "Me",
   "10:40",
   Direction.outgoing,
@@ -91,6 +102,7 @@ final message11 = Message(
   MediaType.voice,
 );
 final message12 = Message(
+  getRandomId(),
   "Another User",
   "10:40",
   Direction.incoming,
@@ -99,6 +111,7 @@ final message12 = Message(
   MediaType.video,
 );
 final message13 = Message(
+  getRandomId(),
   "Another User",
   "message",
   Direction.incoming,
@@ -107,6 +120,7 @@ final message13 = Message(
   null,
 );
 final message14 = Message(
+  getRandomId(),
   "Me",
   "you've Got a Friend in Me",
   Direction.outgoing,
@@ -115,6 +129,7 @@ final message14 = Message(
   null,
 );
 final message15 = Message(
+  getRandomId(),
   "Me",
   "10:40",
   Direction.outgoing,
@@ -123,6 +138,7 @@ final message15 = Message(
   MediaType.voice,
 );
 final message16 = Message(
+  getRandomId(),
   "Another User",
   "10:40",
   Direction.incoming,
@@ -154,4 +170,21 @@ DateTime getRandomTime() {
   );
 
   return randomTime;
+}
+
+final _random = Random();
+final _generatedNumbers = <int>{};
+
+int getRandomId() {
+  if (_generatedNumbers.length == 1000) {
+    _generatedNumbers.clear(); // Reset once all numbers are used
+  }
+
+  int newNumber;
+  do {
+    newNumber = _random.nextInt(1000) + 1;
+  } while (_generatedNumbers.contains(newNumber)); // Ensure uniqueness
+
+  _generatedNumbers.add(newNumber);
+  return newNumber;
 }

@@ -1,6 +1,7 @@
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/screen/MenuDrawer.dart';
+import 'package:copy_project/widget/EmergencyDialog.dart';
 import 'package:copy_project/widget/ui_widget/CircleLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,6 +22,7 @@ final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.group);
 
 class MainScreen extends ConsumerStatefulWidget {
   final double keyboardHeight;
+
   const MainScreen(this.keyboardHeight, {super.key});
 
   @override
@@ -121,7 +123,9 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
       automaticallyImplyLeading: true,
       actions: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              EmergencyDialog().show();
+            },
             icon: Icon(
               Icons.emergency,
               color: Colors.red,

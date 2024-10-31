@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../data/message/MessageDummy.dart';
 import '../widget/PttButton.dart';
 import '../widget/ui_widget/CircleLine.dart';
 import 'MainScreen.dart';
@@ -21,8 +22,14 @@ import 'MainScreen.dart';
 class ConversationScreen extends StatefulWidget {
   final String title;
   final String memberCount;
+  final bool isEmergencyAlert;
 
-  const ConversationScreen({super.key, required this.title, required this.memberCount});
+  const ConversationScreen({
+    super.key,
+    required this.title,
+    required this.memberCount,
+    this.isEmergencyAlert = false,
+  });
 
   @override
   State<ConversationScreen> createState() => _ConversationScreenState();
@@ -45,11 +52,21 @@ class _ConversationScreenState extends State<ConversationScreen>
       setState(() {});
     });
     super.initState();
+    if (widget.isEmergencyAlert) {
+      messageData.msgList.add(Message(
+        getRandomId(),
+        "Me",
+        "Emergency Alert",
+        Direction.outgoing,
+        DateTime.now(),
+        MessageType.emergencyAlert,
+        null,
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("ConversationView height : ${keyboardHeight.height.value}");
     final appBarBg =
         widget.title.contains("Emergency") ? Colors.red : context.appColors.appbarBackground;
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -355,6 +372,7 @@ class _ConversationScreenState extends State<ConversationScreen>
             onTap: () {
               // message insert
               messageData.msgList.add(Message(
+                getRandomId(),
                 "Me",
                 inputTextController.text,
                 Direction.outgoing,
@@ -396,12 +414,23 @@ class _ConversationScreenState extends State<ConversationScreen>
           controller: scrollController,
           itemBuilder: (context, index) {
             final message = messageData.msgList[index];
-            return MessageItem(message);
+            return MessageItem(
+              message,
+              onUpdateMessage: _updateMessageInList,
+            );
           },
           itemCount: messageData.msgList.length,
         ).pOnly(top: 10);
       }),
     );
+  }
+
+  void _updateMessageInList(Message updatedMessage) {
+    final index = messageData.msgList.indexWhere((msg) => msg.id == updatedMessage.id);
+    if (index != -1) {
+      messageData.msgList[index] = updatedMessage;
+      messageData.msgList.refresh();
+    }
   }
 
   AppBar _appBar(Color appBarIconBg, Color appBarBg) {

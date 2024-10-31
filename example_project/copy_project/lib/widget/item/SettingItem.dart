@@ -51,7 +51,7 @@ class _SettingItemState extends State<SettingItem> with SettingProvider {
       decoration: BoxDecoration(
         color: Color(0xFF202020),
         borderRadius: isOnly
-            ? BorderRadius.all(Radius.circular(10))
+            ? BorderRadius.all(radius10)
             : BorderRadius.only(
                 topLeft: Radius.circular(isTop ? 10 : 0),
                 topRight: Radius.circular(isTop ? 10 : 0),

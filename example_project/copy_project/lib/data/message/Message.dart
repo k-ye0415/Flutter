@@ -1,4 +1,5 @@
 class Message {
+  final int id;
   final String displayName;
   final String message;
   final Direction direction;
@@ -6,7 +7,15 @@ class Message {
   final MessageType messageType;
   final MediaType? mediaType;
 
-  Message(this. displayName, this.message, this.direction, this.sendTime, this.messageType, this.mediaType);
+  Message(
+    this.id,
+    this.displayName,
+    this.message,
+    this.direction,
+    this.sendTime,
+    this.messageType,
+    this.mediaType,
+  );
 }
 
 enum Direction {
@@ -22,7 +31,8 @@ enum MessageType {
   emergencyAlert(1),
   normal(2),
   file(3),
-  call(4);
+  call(4),
+  alertClear(5);
 
   const MessageType(this.type);
 
