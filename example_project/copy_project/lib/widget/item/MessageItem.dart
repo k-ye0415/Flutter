@@ -38,7 +38,9 @@ class MessageItem extends StatelessWidget {
             children: [
               Tap(
                 onTap: () {},
-                onLongPress: () {},
+                onLongPress: () {
+                  _longPressMessage(message);
+                },
                 child: Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -127,7 +129,9 @@ class MessageItem extends StatelessWidget {
               ).pOnly(right: 4),
               Tap(
                 onTap: () {},
-                onLongPress: () {},
+                onLongPress: () {
+                  _longPressMessage(message);
+                },
                 child: Container(
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
@@ -174,5 +178,23 @@ class MessageItem extends StatelessWidget {
         ],
       ).pOnly(right: 8),
     );
+  }
+
+  void _longPressMessage(Message message) {
+    message.messageType == MessageType.emergencyAlert
+        ? ContextDialog(
+            menuList: [ContextMenuType.clearAlert],
+            message: message,
+            onItemSelected: (value, msg) {
+              if (value == ContextMenuType.clearAlert) {
+                if (message.id == msg?.id) {
+                  final newMsg = Message(message.id, message.displayName, "[CLR] Emergency Alert",
+                      message.direction, message.sendTime, MessageType.alertClear, null);
+                  if (onUpdateMessage != null) onUpdateMessage!(newMsg);
+                }
+              }
+            },
+          ).show()
+        : null;
   }
 }

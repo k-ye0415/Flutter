@@ -2,24 +2,27 @@ import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/screen/ConversationScreen.dart';
 import 'package:copy_project/data/group/GroupDataProvider.dart';
+import 'package:copy_project/screen/MainScreen.dart';
 import 'package:copy_project/widget/item/GroupItem.dart';
 import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:nav/nav.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../data/group/Group.dart';
 
-class GroupFragment extends StatefulWidget {
+class GroupFragment extends ConsumerStatefulWidget {
   const GroupFragment({super.key});
 
   @override
-  State<GroupFragment> createState() => _GroupFragmentState();
+  ConsumerState createState() => _GroupFragmentState();
 }
 
-class _GroupFragmentState extends State<GroupFragment> with GroupDataProvider, CommonProvider {
+class _GroupFragmentState extends ConsumerState<GroupFragment>
+    with GroupDataProvider, CommonProvider {
   @override
   void initState() {
     Get.put(GroupData());
@@ -29,14 +32,17 @@ class _GroupFragmentState extends State<GroupFragment> with GroupDataProvider, C
 
   @override
   Widget build(BuildContext context) {
+    final searchQuery = ref.watch(searchQueryProvider);
+
     return SingleChildScrollView(
       child: Column(
         children: [
           Obx(() {
             return _SelectedTargetLayout(context);
           }),
-          _groupListView("Special", groupData.specialGroup).pOnly(top: 8),
-          _groupListView("Groups", groupData.normalGroup).pOnly(bottom: keyboardHeight.height.value),
+          _groupListView("Special", groupData.getSpecialGroup(searchQuery), searchQuery).pOnly(top: 8),
+          _groupListView("Groups", groupData.getNormalGroup(searchQuery), searchQuery)
+              .pOnly(bottom: keyboardHeight.height.value),
         ],
       ),
     );
@@ -82,7 +88,7 @@ class _GroupFragmentState extends State<GroupFragment> with GroupDataProvider, C
     );
   }
 
-  Widget _groupListView(String title, List<Group> list) {
+  Widget _groupListView(String title, List<Group> list, String searchText) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -97,6 +103,7 @@ class _GroupFragmentState extends State<GroupFragment> with GroupDataProvider, C
               return GroupItem(
                 group,
                 index,
+                searchText: searchText,
                 list.lastIndex ?? 0,
                 isSelected: groupData.selectedGroup.value == group,
                 onItemTap: () {
