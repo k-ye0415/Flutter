@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/data/message/Message.dart';
 import 'package:copy_project/data/message/MessageDataProvider.dart';
+import 'package:copy_project/screen/CameraScreen.dart';
 import 'package:copy_project/widget/EditTextWidget.dart';
 import 'package:copy_project/widget/RoundedButton.dart';
 import 'package:copy_project/widget/TabWidget.dart';
@@ -12,9 +14,11 @@ import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nav/nav.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../data/message/MessageDummy.dart';
+import '../main.dart';
 import '../widget/PttButton.dart';
 import '../widget/ui_widget/CircleLine.dart';
 import 'MainScreen.dart';
@@ -40,8 +44,11 @@ class _ConversationScreenState extends State<ConversationScreen>
   final inputTextController = TextEditingController();
   final scrollController = ScrollController();
   bool isFileMode = false;
+  bool isVideoMode = false;
   final ImagePicker picker = ImagePicker();
   XFile? _image;
+  late CameraController _cameraController;
+  bool _isCameraInitialized = false;
 
   @override
   void initState() {
@@ -52,6 +59,7 @@ class _ConversationScreenState extends State<ConversationScreen>
       setState(() {});
     });
     super.initState();
+    _initializeCamera();
     if (widget.isEmergencyAlert) {
       messageData.msgList.add(Message(
         getRandomId(),
@@ -65,70 +73,109 @@ class _ConversationScreenState extends State<ConversationScreen>
     }
   }
 
+  Future<void> _initializeCamera() async {
+    _cameraController = CameraController(
+      cameras[0], // Select the desired camera (e.g., front or back)
+      ResolutionPreset.high,
+    );
+    await _cameraController.initialize();
+    setState(() => _isCameraInitialized = true);
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final appBarBg =
         widget.title.contains("Emergency") ? Colors.red : context.appColors.appbarBackground;
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+    final scale =
+        1 / (_cameraController.value.aspectRatio * MediaQuery.of(context).size.aspectRatio);
     return Material(
       child: Scaffold(
         appBar: _appBar(Colors.white, appBarBg),
-        body: Container(
-          color: context.appColors.defaultBackground,
-          child: Column(
-            children: [
-              // chat list 영역
-              _chatListArea(),
-              // file attach 영역
-              _image != null ? _fileAttachLayout() : goneWidget,
-              // text 입력 영역
-              _inputArea(context),
-              // ppt 영역
-              _pttArea(context, isKeyboardVisible)
-              // Container(
-              //   color: context.appColors.pttAreaBackground,
-              //   height: keyboardHeight.height.value, // 높이 조정이 필요해보임.,
-              //   child: Column(
-              //     children: [
-              //       "Tab the PTT button to speak"
-              //           .text
-              //           .color(context.appColors.normalText)
-              //           .size(12)
-              //           .make()
-              //           .pOnly(top: 18, bottom: 40),
-              //       PttButton(),
-              //       Row(
-              //         children: [
-              //           CircleLine(
-              //             borderColor: Color(0xFF4F4F4F),
-              //             borderSize: 1.0,
-              //             foregroundColor: Color(0xFF202020),
-              //             radius: 40.0,
-              //             child: IconButton(
-              //               onPressed: () {},
-              //               icon: Icon(Icons.video_camera_back_rounded),
-              //               highlightColor: context.appColors.defaultRipple,
-              //             ),
-              //           ).pOnly(left: 50),
-              //           Spacer(),
-              //           CircleLine(
-              //             borderColor: Color(0xFF4F4F4F),
-              //             borderSize: 1.0,
-              //             foregroundColor: Color(0xFF202020),
-              //             radius: 40.0,
-              //             child: IconButton(
-              //               onPressed: () {},
-              //               icon: Icon(Icons.speaker),
-              //               highlightColor: context.appColors.defaultRipple,
-              //             ),
-              //           ).pOnly(right: 50),
-              //         ],
-              //       )
-              //     ],
-              //   ),
-              // )
-            ],
-          ),
+        body: Stack(
+          children: [
+            isVideoMode
+                ? Stack(
+                    children: [
+                      // camera 넣기
+                      Container(
+                        color: Colors.green,
+                        child: _isCameraInitialized
+                            ? Transform.scale(scale: scale, child: CameraPreview(_cameraController))
+                            : Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: _pttArea(context, isKeyboardVisible),
+                      ),
+                    ],
+                  )
+                : Container(
+                    color: context.appColors.defaultBackground,
+                    child: Column(
+                      children: [
+                        // chat list 영역
+                        _chatListArea(),
+                        // file attach 영역
+                        _image != null ? _fileAttachLayout() : goneWidget,
+                        // text 입력 영역
+                        _inputArea(context),
+                        // ppt 영역
+                        _pttArea(context, isKeyboardVisible)
+                        // Container(
+                        //   color: context.appColors.pttAreaBackground,
+                        //   height: keyboardHeight.height.value, // 높이 조정이 필요해보임.,
+                        //   child: Column(
+                        //     children: [
+                        //       "Tab the PTT button to speak"
+                        //           .text
+                        //           .color(context.appColors.normalText)
+                        //           .size(12)
+                        //           .make()
+                        //           .pOnly(top: 18, bottom: 40),
+                        //       PttButton(),
+                        //       Row(
+                        //         children: [
+                        //           CircleLine(
+                        //             borderColor: Color(0xFF4F4F4F),
+                        //             borderSize: 1.0,
+                        //             foregroundColor: Color(0xFF202020),
+                        //             radius: 40.0,
+                        //             child: IconButton(
+                        //               onPressed: () {},
+                        //               icon: Icon(Icons.video_camera_back_rounded),
+                        //               highlightColor: context.appColors.defaultRipple,
+                        //             ),
+                        //           ).pOnly(left: 50),
+                        //           Spacer(),
+                        //           CircleLine(
+                        //             borderColor: Color(0xFF4F4F4F),
+                        //             borderSize: 1.0,
+                        //             foregroundColor: Color(0xFF202020),
+                        //             radius: 40.0,
+                        //             child: IconButton(
+                        //               onPressed: () {},
+                        //               icon: Icon(Icons.speaker),
+                        //               highlightColor: context.appColors.defaultRipple,
+                        //             ),
+                        //           ).pOnly(right: 50),
+                        //         ],
+                        //       )
+                        //     ],
+                        //   ),
+                        // )
+                      ],
+                    ),
+                  ),
+          ],
         ),
       ),
     );
@@ -147,7 +194,7 @@ class _ConversationScreenState extends State<ConversationScreen>
   AnimatedContainer _pttArea(BuildContext context, bool isKeyboardVisible) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 0),
-      color: context.appColors.pttAreaBackground,
+      color: isVideoMode ? Colors.transparent : context.appColors.pttAreaBackground,
       height: isKeyboardVisible ? 0 : keyboardHeight.height.value,
       child: Stack(
         children: [
@@ -225,7 +272,7 @@ class _ConversationScreenState extends State<ConversationScreen>
             .size(12)
             .make()
             .pOnly(top: 18, bottom: 40),
-        PttButton(),
+        PttButton(isVideoMode: isVideoMode),
         Row(
           children: [
             CircleLine(
@@ -234,8 +281,15 @@ class _ConversationScreenState extends State<ConversationScreen>
               foregroundColor: Color(0xFF202020),
               radius: 40.0,
               child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.video_camera_back_rounded),
+                onPressed: () {
+                  // video mode
+                  setState(() {
+                    isVideoMode = !isVideoMode;
+                    print("isVideoMode : $isVideoMode");
+                  });
+                  // Nav.push(CameraScreen());
+                },
+                icon: Icon(isVideoMode ? Icons.call : Icons.video_camera_back_rounded),
                 highlightColor: context.appColors.defaultRipple,
               ),
             ).pOnly(left: 50),

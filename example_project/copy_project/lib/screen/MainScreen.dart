@@ -92,7 +92,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
                       bottom: extendBody ? 60 - 30 : 0,
                       child: Container(
                         height: keyboardHeight.height.value,
-                        child: PttButton(),
+                        child: PttButton(isVideoMode:  false,),
                       ),
                     ),
                   ],
