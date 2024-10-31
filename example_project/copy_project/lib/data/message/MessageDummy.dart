@@ -5,7 +5,7 @@ import 'package:copy_project/data/message/Message.dart';
 final message1 = Message(
   "Another User",
   "message",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.normal,
   null,
@@ -29,7 +29,7 @@ final message3 = Message(
 final message4 = Message(
   "Another User",
   "10:40",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.call,
   MediaType.video,
@@ -37,7 +37,7 @@ final message4 = Message(
 final message5 = Message(
   "Another User",
   "message",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.normal,
   null,
@@ -61,7 +61,7 @@ final message7 = Message(
 final message8 = Message(
   "Another User",
   "10:40",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.call,
   MediaType.video,
@@ -69,7 +69,7 @@ final message8 = Message(
 final message9 = Message(
   "Another User",
   "message",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.normal,
   null,
@@ -77,7 +77,7 @@ final message9 = Message(
 final message10 = Message(
   "Another User",
   "Emergency Alert",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.emergencyAlert,
   null,
@@ -93,7 +93,7 @@ final message11 = Message(
 final message12 = Message(
   "Another User",
   "10:40",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.call,
   MediaType.video,
@@ -101,7 +101,7 @@ final message12 = Message(
 final message13 = Message(
   "Another User",
   "message",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.normal,
   null,
@@ -125,7 +125,7 @@ final message15 = Message(
 final message16 = Message(
   "Another User",
   "10:40",
-  Direction.incomming,
+  Direction.incoming,
   getRandomTime(),
   MessageType.call,
   MediaType.video,

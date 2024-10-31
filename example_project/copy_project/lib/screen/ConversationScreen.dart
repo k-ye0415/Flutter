@@ -1,8 +1,10 @@
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
+import 'package:copy_project/data/message/Message.dart';
 import 'package:copy_project/data/message/MessageDataProvider.dart';
 import 'package:copy_project/widget/EditTextWidget.dart';
 import 'package:copy_project/widget/RoundedButton.dart';
+import 'package:copy_project/widget/TabWidget.dart';
 import 'package:copy_project/widget/item/MessageItem.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +27,7 @@ class ConversationScreen extends StatefulWidget {
 class _ConversationScreenState extends State<ConversationScreen>
     with CommonProvider, MessageDataProvider {
   final inputTextController = TextEditingController();
+  final scrollController = ScrollController();
 
   @override
   void initState() {
@@ -194,8 +197,8 @@ class _ConversationScreenState extends State<ConversationScreen>
                     cursorColor: context.appColors.pointColor,
                     cursorWidth: 1,
                     cursorHeight: 18,
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       isDense: true,
                       hintText: "Input message",
@@ -208,22 +211,34 @@ class _ConversationScreenState extends State<ConversationScreen>
                 ],
               ),
             ),
-            // child: EditTextWidget(inputTextController,
-            //     hint: "Input message", context: context),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 11, bottom: 11, left: 16),
-            width: 46,
-            height: 30,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: inputTextController.text.length > 0
-                    ? context.appColors.pointColor
-                    : Colors.grey),
-            child: Center(
-              child: "SEND".text.size(12).white.make(),
-            ),
-          ).pOnly(right: 20),
+          Tap(
+            onTap: () {
+              // message insert
+              messageData.msgList.add(Message(
+                "Me",
+                inputTextController.text,
+                Direction.outgoing,
+                DateTime.now(),
+                MessageType.normal,
+                null,
+              ));
+              inputTextController.clear();
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 11, bottom: 11, left: 16),
+              width: 46,
+              height: 30,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: inputTextController.text.isNotEmpty
+                      ? context.appColors.pointColor
+                      : Colors.grey),
+              child: Center(
+                child: "SEND".text.size(12).white.make(),
+              ),
+            ).pOnly(right: 20),
+          ),
         ],
       ),
     );
@@ -232,15 +247,21 @@ class _ConversationScreenState extends State<ConversationScreen>
   Expanded _chatListArea() {
     return Expanded(
       // child: Container(),
-      child: Obx(
-        () => ListView.builder(
+      child: Obx(() {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.hasClients) {
+            scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          }
+        });
+        return ListView.builder(
+          controller: scrollController,
           itemBuilder: (context, index) {
             final message = messageData.msgList[index];
             return MessageItem(message);
           },
           itemCount: messageData.msgList.length,
-        ).pOnly(top: 10),
-      ),
+        ).pOnly(top: 10);
+      }),
     );
   }
 

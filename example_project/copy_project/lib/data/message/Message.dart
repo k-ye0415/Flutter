@@ -10,7 +10,7 @@ class Message {
 }
 
 enum Direction {
-  incomming(1),
+  incoming(1),
   outgoing(2);
 
   const Direction(this.direction);

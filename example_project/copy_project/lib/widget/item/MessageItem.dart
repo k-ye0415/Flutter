@@ -13,7 +13,7 @@ class MessageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isIncoming = message.direction == Direction.incomming;
+    final isIncoming = message.direction == Direction.incoming;
     return Align(
       alignment: isIncoming ? Alignment.centerLeft : Alignment.centerRight,
       child: Column(
