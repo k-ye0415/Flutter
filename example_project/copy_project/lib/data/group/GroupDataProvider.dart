@@ -10,9 +10,9 @@ abstract mixin class GroupDataProvider {
 }
 
 class GroupData extends GetxController {
-  List<Group> groupList = <Group>[].obs;
-  List<Group> specialGroup = <Group>[].obs;
-  List<Group> normalGroup = <Group>[].obs;
+  RxList<Group> groupList = <Group>[].obs;
+  RxList<Group> specialGroup = <Group>[].obs;
+  RxList<Group> normalGroup = <Group>[].obs;
   Rxn<Group> selectedGroup = Rxn<Group>();
 
   @override
@@ -30,14 +30,41 @@ class GroupData extends GetxController {
     ];
     // all
     groupList.addAll(dummyList);
-
-    // special groupList.filter((group) => group.priority == GroupPriority.special).toList();
-    final list = groupList.filter((group) => group.priority == GroupPriority.special).toList();
-    specialGroup.addAll(list);
-
-    // normal
-    final normalList = groupList.filter((group) => group.priority == GroupPriority.normal).toList();
-    normalGroup.addAll(normalList);
     super.onInit();
+  }
+
+  RxList<Group> getSpecialGroup(String search) {
+    if (specialGroup.isNotEmpty) specialGroup.clear();
+
+    if (search.isEmpty) {
+      final list = groupList.filter((group) => group.priority == GroupPriority.special).toList();
+      specialGroup.addAll(list);
+    } else {
+      final list = groupList
+          .filter((group) =>
+              group.priority == GroupPriority.special &&
+              group.groupName.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+      specialGroup.addAll(list);
+    }
+    return specialGroup;
+  }
+
+  RxList<Group> getNormalGroup(String search) {
+    if (normalGroup.isNotEmpty) normalGroup.clear();
+
+    if (search.isEmpty) {
+      final normalList =
+          groupList.filter((group) => group.priority == GroupPriority.normal).toList();
+      normalGroup.addAll(normalList);
+    } else {
+      final normalList = groupList
+          .filter((group) =>
+              group.priority == GroupPriority.normal &&
+              group.groupName.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+      normalGroup.addAll(normalList);
+    }
+    return normalGroup;
   }
 }

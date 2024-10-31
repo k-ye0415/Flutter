@@ -2,8 +2,10 @@ import 'package:copy_project/widget/ui_widget/CircleLine.dart';
 import 'package:flutter/material.dart';
 
 class PttButton extends StatelessWidget {
+  final bool isVideoMode;
   const PttButton({
     super.key,
+    required this.isVideoMode,
   });
 
   @override
@@ -32,7 +34,7 @@ class PttButton extends StatelessWidget {
           radius: 134.0,
           foregroundColor: Color(0xFF202020),
           child: Icon(
-            Icons.call,
+            isVideoMode ? Icons.video_camera_back_rounded : Icons.call,
             color: Colors.blue,
             size: 60,
           ),

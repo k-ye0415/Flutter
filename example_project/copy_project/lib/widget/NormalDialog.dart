@@ -1,5 +1,6 @@
 import 'package:copy_project/screen/LoginScreen.dart';
 import 'package:copy_project/widget/TabWidget.dart';
+import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:copy_project/widget/ui_widget/VerticalLine.dart';
 import 'package:flutter/material.dart';
@@ -27,16 +28,16 @@ class _NormalDialogState extends DialogState<NormalDialog> {
       child: Center(
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
-              color: Color(0xFF343434)),
+            borderRadius: BorderRadius.all(
+              radius10,
+            ),
+            color: Color(0xFF343434),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              widget.description
-                  .text
+              widget.description.text
                   .size(16)
                   .color(Colors.white)
                   .make()
@@ -60,7 +61,7 @@ class _NormalDialogState extends DialogState<NormalDialog> {
                   VerticalLine(),
                   Expanded(
                     child: Tap(
-                      onTap: (){
+                      onTap: () {
                         Nav.pop(context);
                         Nav.clearAllAndPush(LoginScreen());
                       },

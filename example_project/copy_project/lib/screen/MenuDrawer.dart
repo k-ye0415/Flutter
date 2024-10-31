@@ -221,9 +221,6 @@ class _MenuDrawerState extends State<MenuDrawer> with SettingProvider {
                     Tap(
                       onTap: (){
                         NormalDialog(description: "Are you sure you want to sign out?",).show();
-                        // showDialog(context: context, builder: ((context) {
-                        //   return NormalDialog();
-                        // }));
                       },
                       child: const SettingItem(
                           icon: Icons.logout, title: "Sign out", shapeType: ShapeType.only),

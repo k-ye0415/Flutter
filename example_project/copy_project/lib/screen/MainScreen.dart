@@ -1,8 +1,10 @@
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/screen/MenuDrawer.dart';
+import 'package:copy_project/widget/EmergencyDialog.dart';
 import 'package:copy_project/widget/ui_widget/CircleLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
+import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,9 +20,11 @@ import '../widget/item/TabItem.dart';
 import '../common/TabNavigator.dart';
 
 final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.group);
+final searchQueryProvider = StateProvider<String>((ref) => "");
 
 class MainScreen extends ConsumerStatefulWidget {
   final double keyboardHeight;
+
   const MainScreen(this.keyboardHeight, {super.key});
 
   @override
@@ -39,6 +43,8 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   GlobalKey<NavigatorState> get _currentTabNavigationKey => navigatorKeys[_currentIndex];
 
   bool get extendBody => true;
+  final searchController = TextEditingController();
+  bool _isSearchMode = false;
 
   @override
   void initState() {
@@ -46,22 +52,25 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
     setState(() {
       keyboardHeight.height.value = widget.keyboardHeight;
     });
+    searchController.addListener(() {
+      setState(() {
+        ref.read(searchQueryProvider.notifier).state = searchController.text;
+      });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("MainScreen height : ${keyboardHeight.height.value}");
     return Material(
       child: Stack(
         children: [
           Scaffold(
             backgroundColor: context.appColors.defaultBackground,
-            appBar: _AppBar(),
+            appBar: _appBar(),
             extendBody: extendBody,
-            drawer: MenuDrawer(),
+            drawer: const MenuDrawer(),
             //bottomNavigationBar 아래 영역 까지 그림
-            // drawer: const MenuDrawer(),
             // drawerEnableOpenDragGesture: !Platform.isIOS,
             body: Container(
               padding: EdgeInsets.only(bottom: extendBody ? 60 - 30 : 0),
@@ -83,7 +92,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
                       bottom: extendBody ? 60 - 30 : 0,
                       child: Container(
                         height: keyboardHeight.height.value,
-                        child: PttButton(),
+                        child: PttButton(isVideoMode:  false,),
                       ),
                     ),
                   ],
@@ -112,31 +121,93 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
     );
   }
 
-  AppBar _AppBar() {
+  AppBar _appBar() {
     return AppBar(
-      title: "FirstNet_Copy".text.make(),
+      title: _isSearchMode ? _searchArea() : "FirstNetCopy".text.make(),
       iconTheme: IconThemeData(color: Colors.white),
       titleTextStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
       backgroundColor: context.appColors.appbarBackground,
-      automaticallyImplyLeading: true,
-      actions: [
-        IconButton(
-            onPressed: () {},
+      automaticallyImplyLeading: !_isSearchMode,
+      actions: _isSearchMode
+          ? null
+          : [
+              IconButton(
+                  onPressed: () {
+                    EmergencyDialog().show();
+                  },
+                  icon: Icon(
+                    Icons.emergency,
+                    color: Colors.red,
+                  )),
+              IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _isSearchMode = true;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.search,
+                  )),
+              IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.add,
+                  )),
+            ],
+    );
+  }
+
+  Container _searchArea() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8),
+        ),
+        color: Color(0xFF2d2e30),
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _isSearchMode = false;
+              });
+            },
             icon: Icon(
-              Icons.emergency,
-              color: Colors.red,
-            )),
-        IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-            )),
-        IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.add,
-            )),
-      ],
+              Icons.arrow_back_ios_new_rounded,
+              size: 20,
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              controller: searchController,
+              cursorColor: context.appColors.pointColor,
+              cursorWidth: 1,
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                isDense: true,
+                hintText: "Search group name",
+                hintStyle: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF8f8f8f),
+                ),
+              ),
+            ).pSymmetric(v: 9),
+          ),
+          searchController.text.isNotEmpty
+              ? IconButton(
+                  onPressed: () {
+                    searchController.clear();
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    size: 24,
+                  ),
+                )
+              : goneWidget
+        ],
+      ),
     );
   }
 

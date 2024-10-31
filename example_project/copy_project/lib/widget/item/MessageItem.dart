@@ -1,5 +1,7 @@
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/common/extension/DateTimeExtension.dart';
+import 'package:copy_project/widget/ContextDialog.dart';
+import 'package:copy_project/widget/TabWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -8,97 +10,191 @@ import '../ui_widget/CommonWidget.dart';
 
 class MessageItem extends StatelessWidget {
   final Message message;
+  final Function(Message updateMsg)? onUpdateMessage;
 
-  const MessageItem(this.message, {super.key});
+  const MessageItem(
+    this.message, {
+    super.key,
+    this.onUpdateMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final isIncoming = message.direction == Direction.incomming;
+    return message.direction == Direction.outgoing
+        ? _outgoingBubble(context, message)
+        : _incomingBubble(context, message);
+  }
+
+  Widget _incomingBubble(BuildContext context, Message message) {
     return Align(
-      alignment: isIncoming ? Alignment.centerLeft : Alignment.centerRight,
+      alignment: Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment: isIncoming ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // display Name
-          message.displayName.text.color(Colors.white).make().pOnly(bottom: 2),
-          // message info
+          message.displayName.text.color(Colors.white).size(12).make().pOnly(bottom: 2),
           Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // outgoing -> time, icon
-              isIncoming
-                  ? goneWidget
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        message.messageType == MessageType.emergencyAlert
-                            ? Icon(
-                                Icons.emergency,
-                                color: Colors.red,
-                                size: 16,
-                              )
-                            : goneWidget,
-                        isIncoming ? goneWidget : message.sendTime.formattedTime.text.color(Colors.white).make(),
-                      ],
-                    ).pOnly(right: 4),
-              // bubble
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: message.messageType == MessageType.emergencyAlert
-                      ? Colors.red
-                      : isIncoming
-                          ? context.appColors.incomingBubble
-                          : context.appColors.outgoingBubble,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                    bottomLeft: isIncoming ? Radius.circular(0) : Radius.circular(10),
-                    bottomRight: isIncoming ? Radius.circular(10) : Radius.circular(0),
+              Tap(
+                onTap: () {},
+                onLongPress: () {
+                  _longPressMessage(message);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: message.messageType == MessageType.emergencyAlert
+                        ? Colors.red
+                        : message.messageType == MessageType.alertClear
+                            ? Colors.white
+                            : context.appColors.incomingBubble,
+                    borderRadius: BorderRadius.only(
+                      topRight: radius10,
+                      bottomLeft: radius10,
+                      bottomRight: radius10,
+                    ),
                   ),
-                ),
-                // incoming -> time, icon
-                child: Row(
-                  children: [
-                    if (message.mediaType != null)
-                      if (message.mediaType == MediaType.voice)
+                  child: Row(
+                    children: [
+                      if (message.mediaType != null)
                         Icon(
-                          Icons.call,
+                          message.mediaType == MediaType.voice
+                              ? Icons.call
+                              : Icons.video_camera_back_rounded,
                           color: Colors.white,
                           size: 16,
                         )
                       else
-                        Icon(
-                          Icons.video_camera_back_rounded,
-                          color: Colors.white,
-                          size: 16,
-                        )
-                    else
-                      goneWidget,
-                    message.message.text.color(Colors.white).make().pOnly(left: 2),
-                  ],
+                        goneWidget,
+                      Text(
+                        message.message,
+                        style: TextStyle(
+                            color: message.messageType == MessageType.alertClear
+                                ? Colors.red
+                                : Colors.white,
+                            fontWeight: message.messageType == MessageType.alertClear ||
+                                    message.messageType == MessageType.emergencyAlert
+                                ? FontWeight.bold
+                                : FontWeight.normal),
+                      ).pOnly(left: 2),
+                    ],
+                  ),
                 ),
               ),
-              isIncoming
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        message.messageType == MessageType.emergencyAlert
-                            ? Icon(
-                                Icons.emergency,
-                                color: Colors.red,
-                                size: 16,
-                              )
-                            : goneWidget,
-                        isIncoming ? message.sendTime.formattedTime.text.color(Colors.white).make() : goneWidget,
-                      ],
-                    ).pOnly(left: 4)
-                  : goneWidget
+              Column(
+                children: [
+                  message.messageType == MessageType.emergencyAlert ||
+                          message.messageType == MessageType.alertClear
+                      ? Icon(
+                          Icons.emergency,
+                          color: Colors.red,
+                          size: 16,
+                        )
+                      : goneWidget,
+                  message.sendTime.formattedTime.text.size(10).color(Color(0xFF71757b)).make(),
+                ],
+              ).pOnly(left: 4),
             ],
           ),
         ],
-      ).pOnly(left: isIncoming ? 8 : 0, right: isIncoming ? 0 : 8, bottom: 16),
+      ).pOnly(left: 8),
     );
+  }
+
+  Widget _outgoingBubble(BuildContext context, Message message) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          message.displayName.text.color(Colors.white).size(12).make().pOnly(bottom: 2),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  message.messageType == MessageType.emergencyAlert ||
+                          message.messageType == MessageType.alertClear
+                      ? Icon(
+                          Icons.emergency,
+                          color: Colors.red,
+                          size: 16,
+                        )
+                      : goneWidget,
+                  message.sendTime.formattedTime.text.size(10).color(Color(0xFF71757b)).make(),
+                ],
+              ).pOnly(right: 4),
+              Tap(
+                onTap: () {},
+                onLongPress: () {
+                  _longPressMessage(message);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: message.messageType == MessageType.emergencyAlert
+                        ? Colors.red
+                        : message.messageType == MessageType.alertClear
+                            ? Colors.white
+                            : context.appColors.outgoingBubble,
+                    borderRadius: BorderRadius.only(
+                      topLeft: radius10,
+                      bottomLeft: radius10,
+                      bottomRight: radius10,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      if (message.mediaType != null)
+                        Icon(
+                          message.mediaType == MediaType.voice
+                              ? Icons.call
+                              : Icons.video_camera_back_rounded,
+                          color: Colors.white,
+                          size: 16,
+                        )
+                      else
+                        goneWidget,
+                      Text(
+                        message.message,
+                        style: TextStyle(
+                            color: message.messageType == MessageType.alertClear
+                                ? Colors.red
+                                : Colors.white,
+                            fontWeight: message.messageType == MessageType.alertClear ||
+                                    message.messageType == MessageType.emergencyAlert
+                                ? FontWeight.bold
+                                : FontWeight.normal),
+                      ).pOnly(left: 2),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ],
+      ).pOnly(right: 8),
+    );
+  }
+
+  void _longPressMessage(Message message) {
+    message.messageType == MessageType.emergencyAlert
+        ? ContextDialog(
+            menuList: [ContextMenuType.clearAlert],
+            message: message,
+            onItemSelected: (value, msg) {
+              if (value == ContextMenuType.clearAlert) {
+                if (message.id == msg?.id) {
+                  final newMsg = Message(message.id, message.displayName, "[CLR] Emergency Alert",
+                      message.direction, message.sendTime, MessageType.alertClear, null);
+                  if (onUpdateMessage != null) onUpdateMessage!(newMsg);
+                }
+              }
+            },
+          ).show()
+        : null;
   }
 }

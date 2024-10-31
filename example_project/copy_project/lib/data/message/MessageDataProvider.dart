@@ -1,3 +1,4 @@
+import 'package:copy_project/data/group/GroupDataProvider.dart';
 import 'package:copy_project/data/message/Message.dart';
 import 'package:get/get.dart';
 
@@ -8,7 +9,7 @@ abstract mixin class MessageDataProvider {
 }
 
 class MessageData extends GetxController {
-  List<Message> msgList = <Message>[].obs;
+  RxList<Message> msgList = <Message>[].obs;
 
   @override
   void onInit() {
@@ -33,5 +34,9 @@ class MessageData extends GetxController {
     dummyList.sort((a, b) => a.sendTime.compareTo(b.sendTime));
     msgList.addAll(dummyList);
     super.onInit();
+  }
+
+  void updateMessage(Message message, int index) {
+    msgList[index] = message;
   }
 }

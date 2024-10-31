@@ -1,3 +1,4 @@
+import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
 import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:copy_project/widget/TabWidget.dart';
@@ -15,6 +16,7 @@ class GroupItem extends StatelessWidget {
   final VoidCallback onItemTap;
   final VoidCallback onArrowTap;
   final bool isSelected;
+  final String searchText;
 
   const GroupItem(
     this.group,
@@ -24,6 +26,7 @@ class GroupItem extends StatelessWidget {
     required this.onItemTap,
     required this.onArrowTap,
     required this.isSelected,
+    this.searchText = "",
   });
 
   @override
@@ -60,7 +63,7 @@ class GroupItem extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  group.groupName.text.size(18).color(Colors.white).make(),
+                                  _buildHighlightedText(context, group.groupName, searchText),
                                   "(${group.memberList.length})"
                                       .text
                                       .size(18)
@@ -95,6 +98,39 @@ class GroupItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildHighlightedText(BuildContext context, String text, String searchText) {
+    if (searchText.isEmpty || !text.toLowerCase().contains(searchText.toLowerCase())) {
+      // If there's no match, return the normal text
+      return Text(
+        text,
+        style: TextStyle(color: Colors.white, fontSize: 18),
+      );
+    }
+
+    // Find the match and split the text
+    final startIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
+    final endIndex = startIndex + searchText.length;
+
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            text: text.substring(0, startIndex),
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          TextSpan(
+            text: text.substring(startIndex, endIndex),
+            style: TextStyle(color: context.appColors.pointColor, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: text.substring(endIndex),
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+        ],
       ),
     );
   }
