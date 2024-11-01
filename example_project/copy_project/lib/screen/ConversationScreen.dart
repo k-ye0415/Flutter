@@ -5,9 +5,6 @@ import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/data/message/Message.dart';
 import 'package:copy_project/data/message/MessageDataProvider.dart';
-import 'package:copy_project/screen/CameraScreen.dart';
-import 'package:copy_project/widget/EditTextWidget.dart';
-import 'package:copy_project/widget/RoundedButton.dart';
 import 'package:copy_project/widget/TabWidget.dart';
 import 'package:copy_project/widget/item/MessageItem.dart';
 import 'package:copy_project/widget/ui_widget/CommonWidget.dart';
@@ -93,8 +90,9 @@ class _ConversationScreenState extends State<ConversationScreen>
     final appBarBg =
         widget.title.contains("Emergency") ? Colors.red : context.appColors.appbarBackground;
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-    final scale =
-        1 / (_cameraController.value.aspectRatio * MediaQuery.of(context).size.aspectRatio);
+    final scale = _isCameraInitialized
+        ? 1 / (_cameraController.value.aspectRatio * MediaQuery.of(context).size.aspectRatio)
+        : 1.0;
     return Material(
       child: Scaffold(
         appBar: _appBar(Colors.white, appBarBg),
@@ -130,48 +128,6 @@ class _ConversationScreenState extends State<ConversationScreen>
                         _inputArea(context),
                         // ppt 영역
                         _pttArea(context, isKeyboardVisible)
-                        // Container(
-                        //   color: context.appColors.pttAreaBackground,
-                        //   height: keyboardHeight.height.value, // 높이 조정이 필요해보임.,
-                        //   child: Column(
-                        //     children: [
-                        //       "Tab the PTT button to speak"
-                        //           .text
-                        //           .color(context.appColors.normalText)
-                        //           .size(12)
-                        //           .make()
-                        //           .pOnly(top: 18, bottom: 40),
-                        //       PttButton(),
-                        //       Row(
-                        //         children: [
-                        //           CircleLine(
-                        //             borderColor: Color(0xFF4F4F4F),
-                        //             borderSize: 1.0,
-                        //             foregroundColor: Color(0xFF202020),
-                        //             radius: 40.0,
-                        //             child: IconButton(
-                        //               onPressed: () {},
-                        //               icon: Icon(Icons.video_camera_back_rounded),
-                        //               highlightColor: context.appColors.defaultRipple,
-                        //             ),
-                        //           ).pOnly(left: 50),
-                        //           Spacer(),
-                        //           CircleLine(
-                        //             borderColor: Color(0xFF4F4F4F),
-                        //             borderSize: 1.0,
-                        //             foregroundColor: Color(0xFF202020),
-                        //             radius: 40.0,
-                        //             child: IconButton(
-                        //               onPressed: () {},
-                        //               icon: Icon(Icons.speaker),
-                        //               highlightColor: context.appColors.defaultRipple,
-                        //             ),
-                        //           ).pOnly(right: 50),
-                        //         ],
-                        //       )
-                        //     ],
-                        //   ),
-                        // )
                       ],
                     ),
                   ),

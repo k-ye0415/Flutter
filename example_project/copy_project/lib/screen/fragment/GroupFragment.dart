@@ -1,4 +1,5 @@
 import 'package:copy_project/common/CommonProvider.dart';
+import 'package:copy_project/common/database/GroupviewModel.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/screen/ConversationScreen.dart';
 import 'package:copy_project/data/group/GroupDataProvider.dart';
@@ -33,16 +34,33 @@ class _GroupFragmentState extends ConsumerState<GroupFragment>
   @override
   Widget build(BuildContext context) {
     final searchQuery = ref.watch(searchQueryProvider);
-
+    final groupViewModel = ref.watch(groupViewModelProvider);
+    //
+    // if (groupViewModel.groupList.isEmpty) {
+    //   groupViewModel.loadGroups();
+    // }
+    //
+    // final emergencyGroup = groupViewModel.groupList
+    //     .filter((group) => group.groupName.contains("Emergency"))
+    //     .firstOrNull();
+    // groupData.emergencyGroup.value = emergencyGroup;
+    //
+    // final homeGroup =
+    //     groupViewModel.groupList.filter((group) => group.groupName.contains("Home")).firstOrNull();
+    // groupData.homeGroup.value = homeGroup;
     return SingleChildScrollView(
       child: Column(
         children: [
           Obx(() {
             return _SelectedTargetLayout(context);
           }),
-          _groupListView("Special", groupData.getSpecialGroup(searchQuery), searchQuery).pOnly(top: 8),
-          _groupListView("Groups", groupData.getNormalGroup(searchQuery), searchQuery)
-              .pOnly(bottom: keyboardHeight.height.value),
+          _groupListView(
+            "Special",
+            groupViewModel.groupList.where((group) {
+              return (group.groupName.toLowerCase()).contains(searchQuery.toLowerCase());
+            }).toList(),
+            searchQuery,
+          ).pOnly(bottom: keyboardHeight.height.value),
         ],
       ),
     );
@@ -92,36 +110,36 @@ class _GroupFragmentState extends ConsumerState<GroupFragment>
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        CategoryWidget(title: title),
-        Obx(
-          () => ListView.builder(
-            shrinkWrap: true,
-            primary: false,
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              final group = list[index];
-              return GroupItem(
-                group,
-                index,
-                searchText: searchText,
-                list.lastIndex ?? 0,
-                isSelected: groupData.selectedGroup.value == group,
-                onItemTap: () {
-                  if (groupData.selectedGroup.value == group) {
-                    groupData.selectedGroup.value = null;
-                  } else {
-                    groupData.selectedGroup.value = group;
-                  }
-                },
-                onArrowTap: () {
-                  Nav.push(ConversationScreen(
-                    title: group.groupName,
-                    memberCount: "(${group.memberList.length})",
-                  ));
-                },
-              );
-            },
-          ),
+        // CategoryWidget(title: title),
+        ListView.builder(
+          shrinkWrap: true,
+          primary: false,
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            final group = list[index];
+            final showCategory = index == 0 || list[index].priority != list[index - 1].priority;
+            return GroupItem(
+              group,
+              index,
+              searchText: searchText,
+              list.lastIndex ?? 0,
+              showCategory: showCategory,
+              isSelected: groupData.selectedGroup.value == group,
+              onItemTap: () {
+                if (groupData.selectedGroup.value == group) {
+                  groupData.selectedGroup.value = null;
+                } else {
+                  groupData.selectedGroup.value = group;
+                }
+              },
+              onArrowTap: () {
+                Nav.push(ConversationScreen(
+                  title: group.groupName,
+                  memberCount: "(${group.memberList.length})",
+                ));
+              },
+            );
+          },
         ),
       ],
     );

@@ -1,3 +1,4 @@
+import 'package:copy_project/data/group/Group.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -27,26 +28,39 @@ class DatabaseHelper {
   Future<void> _onTableCreate(Database db, int version) async {
     // Group
     await db.execute('''
-    CREATE TABLE Group (
+     CREATE TABLE GroupTable (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       priority TEXT NOT NULL,
       groupIcon TEXT NOT NULL,
       groupName TEXT NOT NULL,
-      groupMember TEXT NOT NULL
+      groupDescription TEXT NOT NULL,
+      memberList TEXT NOT NULL
     )
     ''');
 
     // Message
-    await db.execute('''
-    CREATE TABLE Message (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      displayName TEXT NOT NULL,
-        message TEXT NOT NULL,
-        direction TEXT NOT NULL,
-        sendTime TEXT NOT NULL,
-        messageType TEXT NOT NULL,
-        mediaType TEXT
-    )
-    ''');
+    // await db.execute('''
+    // CREATE TABLE MessageTable (
+    //   id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //   displayName TEXT NOT NULL,
+    //     message TEXT NOT NULL,
+    //     direction TEXT NOT NULL,
+    //     sendTime TEXT NOT NULL,
+    //     messageType TEXT NOT NULL,
+    //     mediaType TEXT
+    // )
+    // ''');
+  }
+
+  Future<void> insertGroup(Group group) async {
+    final db = await database;
+    await db.insert("GroupTable", group.toJson());
+  }
+
+  Future<List<Group>> getGroups() async {
+    print("getGroups");
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query("GroupTable");
+    return List.generate(maps.length, (index) => Group.fromJson(maps[index]));
   }
 }
