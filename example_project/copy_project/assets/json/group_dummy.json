@@ -1,0 +1,118 @@
+{
+  "groups": [
+    {
+      "priority": "special",
+      "groupIcon": "/ic_emergency.svg",
+      "groupName": "Emergency Group",
+      "groupDescription": "EmergencyGroup (Agency default)",
+      "memberList": [
+        {"displayName": "너가문제야?", "presence": "online"},
+        {"displayName": "user2", "presence": "online"},
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user5", "presence": "online"},
+        {"displayName": "user6", "presence": "online"},
+        {"displayName": "user7", "presence": "online"},
+        {"displayName": "user8", "presence": "online"},
+        {"displayName": "user9", "presence": "online"},
+        {"displayName": "user10", "presence": "online"},
+        {"displayName": "user11", "presence": "online"},
+        {"displayName": "user12", "presence": "online"}
+      ]
+    },
+    {
+      "priority": "special",
+      "groupIcon": "/ic_home.svg",
+      "groupName": "Home Group",
+      "groupDescription": "HomeGroup (Agency default)",
+      "memberList": [
+        {"displayName": "도대체 어디..?", "presence": "online"},
+        {"displayName": "user2", "presence": "online"},
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user5", "presence": "online"},
+        {"displayName": "user6", "presence": "online"},
+        {"displayName": "user7", "presence": "online"},
+        {"displayName": "user8", "presence": "online"},
+        {"displayName": "user9", "presence": "online"},
+        {"displayName": "user10", "presence": "online"},
+        {"displayName": "user11", "presence": "online"},
+        {"displayName": "user12", "presence": "online"}
+      ]
+    },
+    {
+      "priority": "normal",
+      "groupIcon": "/ic_pre_group.svg",
+      "groupName": "How Far I'll Go",
+      "groupDescription": "Pre-arranged Group",
+      "memberList": [
+        {"displayName": "야인가?", "presence": "online"},
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user6", "presence": "online"}
+      ]
+    },
+    {
+      "priority": "normal",
+      "groupIcon": "/ic_pre_group.svg",
+      "groupName": "This is Me",
+      "groupDescription": "Pre-arranged Group",
+      "memberList": [
+        {"displayName": "이것도아니고?", "presence": "online"},
+        {"displayName": "user2", "presence": "online"},
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user5", "presence": "online"},
+        {"displayName": "user6", "presence": "online"},
+        {"displayName": "user7", "presence": "online"},
+        {"displayName": "user8", "presence": "online"},
+        {"displayName": "user9", "presence": "online"},
+        {"displayName": "user10", "presence": "online"}
+      ]
+    },
+    {
+      "priority": "normal",
+      "groupIcon": "/ic_pre_group.svg",
+      "groupName": "Let it Go",
+      "groupDescription": "Pre-arranged Group",
+      "memberList": [
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user5", "presence": "online"},
+        {"displayName": "user6", "presence": "online"}
+      ]
+    },
+    {
+      "priority": "normal",
+      "groupIcon": "/ic_pre_group.svg",
+      "groupName": "I See the Light",
+      "groupDescription": "Pre-arranged Group",
+      "memberList": [
+        {"displayName": "너야?", "presence": "online"},
+        {"displayName": "user2", "presence": "online"},
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user5", "presence": "online"},
+        {"displayName": "user6", "presence": "online"},
+        {"displayName": "user7", "presence": "online"},
+        {"displayName": "user8", "presence": "online"},
+        {"displayName": "user9", "presence": "online"},
+        {"displayName": "user10", "presence": "online"}
+      ]
+    },
+    {
+      "priority": "normal",
+      "groupIcon": "/ic_pre_group.svg",
+      "groupName": "A Whole New World",
+      "groupDescription": "Pre-arranged Group",
+      "memberList": [
+        {"displayName": "???????????????????????????", "presence": "online"},
+        {"displayName": "user2", "presence": "online"},
+        {"displayName": "user3", "presence": "online"},
+        {"displayName": "user4", "presence": "online"},
+        {"displayName": "user5", "presence": "online"},
+        {"displayName": "user6", "presence": "online"}
+      ]
+    }
+  ]
+}

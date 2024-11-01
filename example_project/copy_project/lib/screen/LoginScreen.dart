@@ -1,10 +1,12 @@
 import 'package:copy_project/common/CommonProvider.dart';
+import 'package:copy_project/common/database/GroupviewModel.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
 import 'package:copy_project/screen/MainScreen.dart';
 import 'package:copy_project/widget/ui_widget/VerticalLine.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nav/nav.dart';
+import 'package:provider/provider.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../widget/EditTextWidget.dart';
@@ -71,8 +73,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 RoundedButton(
                   text: "Sign in",
                   bgColor: context.appColors.pointColor,
-                  onTap: () {
+                  onTap: () async {
                     debugPrint("Login Screen keyboardHeight : $keyboardHeight");
+                    String json = await DefaultAssetBundle.of(context)
+                        .loadString("assets/json/group_dummy.json");
+
+                    await Provider.of<GroupViewModel>(context, listen: false)
+                        .insertGroupFromJson(json);
+
                     Nav.clearAllAndPush(MainScreen(keyboardHeight));
                   },
                 ),

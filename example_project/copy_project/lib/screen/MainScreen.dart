@@ -1,5 +1,6 @@
 import 'package:copy_project/common/CommonProvider.dart';
 import 'package:copy_project/common/extension/ContextExtension.dart';
+import 'package:copy_project/data/group/GroupDataProvider.dart';
 import 'package:copy_project/screen/MenuDrawer.dart';
 import 'package:copy_project/widget/EmergencyDialog.dart';
 import 'package:copy_project/widget/ui_widget/CircleLine.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:nav/nav.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import '../common/database/GroupviewModel.dart';
 import '../widget/ActiveChannel.dart';
 import '../widget/PttButton.dart';
 import 'ConversationScreen.dart';
@@ -21,6 +23,9 @@ import '../common/TabNavigator.dart';
 
 final currentTabProvider = StateProvider<TabItem>((ref) => TabItem.group);
 final searchQueryProvider = StateProvider<String>((ref) => "");
+final groupViewModelProvider = ChangeNotifierProvider<GroupViewModel>((ref) {
+  return GroupViewModel();
+});
 
 class MainScreen extends ConsumerStatefulWidget {
   final double keyboardHeight;
@@ -31,7 +36,7 @@ class MainScreen extends ConsumerStatefulWidget {
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
+class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider, GroupDataProvider {
   final tabs = TabItem.values;
   late final List<GlobalKey<NavigatorState>> navigatorKeys =
       TabItem.values.map((e) => GlobalKey<NavigatorState>()).toList();
@@ -49,6 +54,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
   @override
   void initState() {
     Get.put(KeyboardHeight());
+    Get.put(GroupData());
     setState(() {
       keyboardHeight.height.value = widget.keyboardHeight;
     });
@@ -62,6 +68,20 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
 
   @override
   Widget build(BuildContext context) {
+    final groupViewModel = ref.watch(groupViewModelProvider);
+
+    if (groupViewModel.groupList.isEmpty) {
+      groupViewModel.loadGroups();
+    }
+
+    final emergencyGroup = groupViewModel.groupList
+        .filter((group) => group.groupName.contains("Emergency"))
+        .firstOrNull();
+    groupData.emergencyGroup.value = emergencyGroup;
+
+    final homeGroup =
+    groupViewModel.groupList.filter((group) => group.groupName.contains("Home")).firstOrNull();
+    groupData.homeGroup.value = homeGroup;
     return Material(
       child: Stack(
         children: [
@@ -82,7 +102,9 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
                     Column(
                       children: [
                         // active channel bar
-                        ActiveChannel(),
+                        ActiveChannel(
+                          group: groupData.homeGroup.value,
+                        ),
                         Expanded(child: pages),
                       ],
                     ),
@@ -92,7 +114,9 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
                       bottom: extendBody ? 60 - 30 : 0,
                       child: Container(
                         height: keyboardHeight.height.value,
-                        child: PttButton(isVideoMode:  false,),
+                        child: PttButton(
+                          isVideoMode: false,
+                        ),
                       ),
                     ),
                   ],
@@ -171,6 +195,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with CommonProvider {
             onPressed: () {
               setState(() {
                 _isSearchMode = false;
+                searchController.clear();
               });
             },
             icon: Icon(

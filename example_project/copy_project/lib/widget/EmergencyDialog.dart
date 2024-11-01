@@ -9,6 +9,7 @@ import 'package:copy_project/widget/ui_widget/HorizontalLine.dart';
 import 'package:copy_project/widget/ui_widget/VerticalLine.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:nav/dialog/dialog.dart';
 import 'package:nav/nav.dart';
@@ -47,15 +48,20 @@ class _EmergencyDialog extends DialogState<EmergencyDialog> with GroupDataProvid
 
   void _sendEmergencyAlert() {
     Nav.pop(context);
-    final emergencyGroup =
-        groupData.groupList.filter((group) => group.groupName == "Emergency Group").first;
-    Nav.push(
-      ConversationScreen(
-        title: emergencyGroup.groupName,
-        memberCount: "(${emergencyGroup.memberList.length})",
-        isEmergencyAlert: true,
-      ),
-    );
+    if (groupData.emergencyGroup.value != null) {
+      Nav.push(
+        ConversationScreen(
+          title: groupData.emergencyGroup.value!.groupName,
+          memberCount: "(${groupData.emergencyGroup.value!.memberList.length})",
+          isEmergencyAlert: true,
+        ),
+      );
+    } else {
+      Fluttertoast.showToast(
+          msg: "Emergency group does not exist.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER);
+    }
   }
 
   @override
